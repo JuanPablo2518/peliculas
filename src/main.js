@@ -14,11 +14,18 @@ import { createPinia } from "pinia";
 import { useLoginStore } from "./stores/loginStore";
 import { useMoviesStore } from "./stores/moviesStore";
 
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { fas } from "@fortawesome/free-solid-svg-icons";
+
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap";
 import "@/assets/scss/main.scss";
 
+library.add(fas);
+
 const app = createApp(App);
+app.component("font-awesome-icon", FontAwesomeIcon);
 const pinia = createPinia();
 
 app.use(pinia);

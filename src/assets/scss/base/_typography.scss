@@ -1,6 +1,13 @@
+@use '@/assets/scss/abstracts/variables' as *;
+@use '@/assets/scss/abstracts/mixins' as *;
+
 $font-base: 'Roboto', sans-serif;
 $font-display: 'Raleway', serif;
 
+
+h1, h2, h3, h4, p, a, li, label {
+    color: $text-light;
+}
 h1 {  
     font-family: $font-display;
     font-size: clamp(1.20rem, 2.9vw, 1.95rem);
@@ -21,7 +28,7 @@ h4 {
     font-size: clamp(0.75rem, 2.3vw, 1.35rem);
 }
 
-p, li, a {  
+p, li, a, label {  
     font-family: $font-base;
     font-size: clamp(0.55rem, 1.85vw, 1.05rem);
 }

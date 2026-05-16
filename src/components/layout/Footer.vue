@@ -52,6 +52,7 @@ const isAdmin = computed(() => loginStore.role === "admin")
 
 
 .footer {
+    border-top: 6px solid $primary-color;
     background-color: $secondary-color;
     color: $text-light
 }

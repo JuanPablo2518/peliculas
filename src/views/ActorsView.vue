@@ -2,7 +2,7 @@
 
 <template>
     <!-- Title -->
-    <h2 class="text-center my-5">Actores</h2>
+    <h1 class="actors-title text-center my-5">Ingresar Actores</h1>
 
     <ActorForm :actor="selectedActor" @save="saveActor" @cancel="resetForm" />
 
@@ -15,17 +15,102 @@
             <tr>
 
                 <th>Nombre</th>
-                <th>Acciones</th>
+                <!-- <th>Acciones</th> -->
             </tr>
         </thead>
         <tbody>
             <!-- Table Content -->
             <tr v-for="actor in sortedActors" :key="actor.id">
-                <td>{{ actor.name }}</td>
                 <td>
+                    <a data-bs-toggle="collapse" :data-bs-target="'#actorContent' + actor.id"
+                        class="d-flex align-items-center justify-content-between px-3 py-2">
+                        {{ actor.name }} <font-awesome-icon icon="fa-solid fa-angle-down" />
+                    </a>
+
+
+                    <div :id="'actorContent' + actor.id" class="collapse table-content ">
+                        <div class="d-flex flex-column flex-md-row align-items-center  p-5 gap-5">
+                            <div class="d-flex flex-column flex-shrink-0 me-1 me-md-3 me-lg-5">
+                                <img :src="actor.photo || 'https://png.pngtree.com/png-vector/20221010/ourmid/pngtree-actors-icon-png-image_6293100.png'"
+                                    class="img-fluid " alt="">
+                                <div class="d-flex justify-content-between mt-3">
+                                    <button class="btn btn-primary btn-sm" @click="editActor(actor)">Editar</button>
+                                    <button data-bs-toggle="modal" data-bs-target="#actorModal"
+                                        @click="actorId = actor.id" class="btn btn-danger btn-sm">Eliminar</button>
+                                </div>
+                            </div>
+                            <div class="table-content w-100  px-3 py-4">
+
+
+                                <div class="d-flex align-items-center mb-3">
+                                    <font-awesome-icon class="actor-icon" icon="fa-solid fa-user" />
+                                    <p class="mb-0" v-if="!isEditing"> Nombre: {{ actor.name }}</p>
+                                    <input class="form-control" v-else type="text" :value="actor.name"
+                                        :placeholder="actor.name">
+                                </div>
+
+                                <div class="d-flex align-items-center mb-3">
+                                    <font-awesome-icon class="actor-icon" icon="fa-solid fa-book" />
+                                    <p class="mb-0" v-if="!isEditing"> Biografia: {{ actor.biography || "Sin Biografia"
+                                    }}</p>
+                                    <textarea class="form-control" v-else type="text" :value="actor.biography"
+                                        :placeholder="actor.biography"> </textarea>
+                                </div>
+
+                                <div class="d-flex align-items-center mb-3">
+                                    <font-awesome-icon class="actor-icon" icon="fa-solid fa-cake-candles" />
+                                    <p class="mb-0" v-if="!isEditing"> Fecha de nacimiento: {{ actor.dateOfBirth }}</p>
+                                    <input class="form-control" v-else type="date" :value="actor.dateOfBirth"
+                                        :placeholder="actor.dateOfBirth">
+                                </div>
+
+                                <div class="d-flex align-items-center mb-3">
+                                    <font-awesome-icon class="actor-icon" icon="fa-solid fa-dove" />
+                                    <p class="mb-0" v-if="!isEditing"> Fecha de fallecimiento: {{ actor.dateOfDeath }}
+                                    </p>
+                                    <input class="form-control" v-else type="date" :value="actor.dateOfDeath"
+                                        :placeholder="actor.dateOfDeath">
+                                </div>
+
+                                <div class="d-flex align-items-center mb-3">
+                                    <div>
+                                        <font-awesome-icon v-if="actor.gender === 'M'" class="actor-icon"
+                                            icon="fa-solid fa-mars" />
+                                        <font-awesome-icon v-else class="actor-icon" icon="fa-solid fa-venus" />
+                                    </div>
+                                    <p class="mb-0" v-if="!isEditing"> Genero: {{ actor.gender }}</p>
+                                    <select class="form-select" v-else v-model="actor.gender">
+                                        <option value="">Seleccione</option>
+                                        <option value="M">Masculino</option>
+                                        <option value="F">Femenino</option>
+                                    </select>
+                                </div>
+
+                                <div class="d-flex align-items-center mb-3">
+                                    <font-awesome-icon class="actor-icon" icon="fa-solid fa-map" />
+                                    <p class="mb-0" v-if="!isEditing"> Ubicacion Nacimiento: {{ actor.birthLocation }}
+                                    </p>
+                                    <input class="form-control" v-else type="text" :value="actor.birthLocation"
+                                        :placeholder="actor.birthLocation">
+                                </div>
+
+                                <div v-if="isEditing" class="d-flex align-items-center mb-3">
+                                    <font-awesome-icon class="actor-icon" icon="fa-solid fa-camera" />
+                                    <input class="form-control" type="text" :value="actor.photo"
+                                        :placeholder="actor.photo">
+                                </div>
+                                <p>
+                                    <font-awesome-icon class="actor-icon" icon="fa-solid fa-star" />
+                                    Ranking TMDB: {{ actor.tmdbPopularity }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <td>
                     <button class="btn btn-primary btn-sm" @click="editActor(actor)">Editar</button>
                     <button data-bs-toggle="modal" data-bs-target="#actorModal" @click="actorId = actor.id"
                         class="btn btn-danger btn-sm">Eliminar</button>
+                </td> -->
                 </td>
             </tr>
         </tbody>
@@ -184,4 +269,27 @@ const sortedActors = computed(() => {
 
 </script>
 
-<style scoped></style>
+<style scoped lang="scss">
+@use '@/assets/scss/abstracts/variables' as *;
+@use '@/assets/scss/abstracts/mixins' as *;
+
+.actors-title {
+    font-weight: 800;
+    font-size: clamp(1.80rem, 3vw, 3.6rem);
+}
+
+.table {
+    table-layout: fixed;
+}
+
+img {
+    aspect-ratio: 3 / 4;
+    width: clamp(150px, 13vw, 300px);
+    object-fit: cover;
+}
+
+.actor-icon {
+    color: $primary-color;
+    margin-right: 4px;
+}
+</style>

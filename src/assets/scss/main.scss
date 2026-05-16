@@ -1,2 +1,68 @@
+@use 'sass:color';
 @use 'base/reset';
-@use 'base/typography'
+@use 'base/typography';
+
+@use '@/assets/scss/abstracts/variables' as *;
+@use '@/assets/scss/abstracts/mixins' as *;
+
+
+body {
+    background-color: $secondary-color;
+}
+
+input.form-control,
+textarea.form-control,
+select.form-select {
+    background-color: $secondary-color;
+    border: 2px solid $primary-color;
+    color: $text-light;
+    --bs-form-select-bg-img: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/></svg>");
+
+    &:disabled {
+        background-color: color.adjust($secondary-color, $lightness: -10%);
+        color: #aaa;
+        cursor: not-allowed;
+        opacity: 0.6;
+    }
+
+    &:focus {
+        outline: none;
+        background-color: $secondary-color;
+        border-color: $primary-color;
+        box-shadow: 0 0 0 3px rgba($primary-color, 0.2);
+        color: $text-light;
+    }
+}
+
+.table {
+    border-collapse: separate;  // ← necesario para que funcione border-radius
+    border-spacing: 0;          
+    border-radius: 5px;
+    overflow: hidden;
+    color: white;
+
+    td{
+        color: white;
+        border: 2px solid color.adjust($secondary-color, $lightness: +10%);
+        background-color: $secondary-color;
+        padding: 0  ;
+    }
+
+    th {
+        color: white;
+        font-weight: 700;
+    }
+
+    thead {
+    --bs-table-bg: #{$primary-color};
+    --bs-table-border-color: #{$secondary-color};    
+    --bs-table-color: #{$secondary-color};
+    }
+
+    .table-content {
+        background-color: color.adjust($secondary-color, $lightness: +5%);
+    }
+}
+
+
+

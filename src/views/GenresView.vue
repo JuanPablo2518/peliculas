@@ -14,18 +14,34 @@
         <thead>
             <tr>
                 <th>Nombre</th>
-                <th>Acciones</th>
+
             </tr>
         </thead>
         <tbody>
             <!-- Table Content -->
             <tr v-for="genre in sortedGenres" :key="genre.id">
-                <td>{{ genre.name }}</td>
+                <td>
+                    <button class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#miContenido">
+                        Abrir ▾
+                    </button>
+
+                    <div id="miContenido" class="collapse">
+                        <div class="card card-body">
+                            Contenido expandido aquí
+                        </div>
+                    </div>
+                    <!-- <td>
+                    <button class="btn btn-primary btn-sm" @click="editActor(actor)">Editar</button>
+                    <button data-bs-toggle="modal" data-bs-target="#actorModal" @click="actorId = actor.id"
+                        class="btn btn-danger btn-sm">Eliminar</button>
+                </td> -->
+                </td>
+                <!-- <td>{{ genre.name }}</td>
                 <td>
                     <button class="btn btn-primary btn-sm" @click="editGenre(genre)">Editar</button>
                     <button data-bs-toggle="modal" data-bs-target="#genreModal" class="btn btn-danger btn-sm"
                         @click="genreId = genre.id">Eliminar</button>
-                </td>
+                </td> -->
             </tr>
         </tbody>
     </table>

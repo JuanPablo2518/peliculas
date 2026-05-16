@@ -84,6 +84,7 @@ const logOut = async () => {
 
 .header {
     background-color: $secondary-color;
+    border-bottom: 6px solid $primary-color;
 }
 
 .header-title {
