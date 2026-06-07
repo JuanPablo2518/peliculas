@@ -1,3 +1,5 @@
+@use "sass:color";
+
 @mixin underline-animation($color, $bottom) {
     display: inline-block;
     position: relative;
@@ -18,4 +20,11 @@
         width: 100%;
         left: 0;
     }
+}
+
+@mixin gender-badge($color) {
+    padding: 5px 25px;
+    border: solid 3px $color;
+    border-radius: 20px;
+    background-color: color.adjust($color, $lightness: -20%);
 }

@@ -2,49 +2,51 @@
 
 <template>
     <!-- Title -->
-    <h2 class="text-center my-5">Generos</h2>
+    <h2 class="text-center my-5" >Géneros</h2>
 
     <GeneresForm :genre="selectedGenre" @save="saveGenre" @cancel="resetForm" />
 
-    <button class="btn btn-success" @click="activeFilter = (activeFilter === 'asc' ? 'desc' : 'asc')">Ordenar: {{
-        activeFilter === 'asc' ? 'A - Z' : 'Z - A' }}</button>
-
+    <div class="w-100 w-lg-75 mx-auto">
+        
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <div class="d-flex gap-3 ">
+                <h5 class="m-0">Listado</h5>
+                <p class="small border border-2 rounded px-3">{{ genres.length }} géneros</p>
+            </div>
+            <button class="btn btn-outline-light " @click="activeFilter = (activeFilter === 'asc' ? 'desc' : 'asc')"><font-awesome-icon icon="fa-solid fa-up-down" /> {{
+            activeFilter === 'asc' ? 'A <- Z' : 'Z -> A' }}</button>
+        </div>
     <!-- Table of genres -->
-    <table class="table table-striped mb-5">
+     <div class="rounded-3 overflow-hidden">
+            <table class="table table-striped mb-5  mx-auto">
         <thead>
             <tr>
-                <th>Nombre</th>
-
+                <th class="text-muted ps-4">Nombre</th>
+                <th class="text-muted text-end pe-4" >Acciones</th>
             </tr>
         </thead>
         <tbody>
             <!-- Table Content -->
-            <tr v-for="genre in sortedGenres" :key="genre.id">
-                <td>
-                    <button class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#miContenido">
-                        Abrir ▾
-                    </button>
-
-                    <div id="miContenido" class="collapse">
-                        <div class="card card-body">
-                            Contenido expandido aquí
-                        </div>
+            <tr class="align-middle " v-for="genre in sortedGenres" :key="genre.id">
+                    <td class="py-2 ps-4  ">{{ genre.name }}</td> 
+                <td  class=" py-2 px-5   ">
+                    <div class="d-flex justify-content-end align-items-end flex-column flex-md-row gap-3 gap-md-5">
+                        <button class="btn  btn-yellow d-flex flex-column flex-md-row align-items-center gap-2 px-3 rounded-2 btn-sm action-btn flex-shrink-0" @click="editGenre(genre)">
+                            <font-awesome-icon icon="fa-solid fa-pen-to-square responsive-icon" />
+                            <span>Editar</span>
+                        </button>
+                        <button data-bs-toggle="modal" data-bs-target="#genreModal" class="btn  btn-danger d-flex flex-column flex-md-row align-items-center gap-2 action-btn btn-sm flex-shrink-0"
+                            @click="genreId = genre.id">
+                            <font-awesome-icon icon="fa-solid fa-trash responsive-icon" />
+                            <span>Eliminar</span>
+                        </button>
                     </div>
-                    <!-- <td>
-                    <button class="btn btn-primary btn-sm" @click="editActor(actor)">Editar</button>
-                    <button data-bs-toggle="modal" data-bs-target="#actorModal" @click="actorId = actor.id"
-                        class="btn btn-danger btn-sm">Eliminar</button>
-                </td> -->
                 </td>
-                <!-- <td>{{ genre.name }}</td>
-                <td>
-                    <button class="btn btn-primary btn-sm" @click="editGenre(genre)">Editar</button>
-                    <button data-bs-toggle="modal" data-bs-target="#genreModal" class="btn btn-danger btn-sm"
-                        @click="genreId = genre.id">Eliminar</button>
-                </td> -->
             </tr>
         </tbody>
     </table>
+     </div>
+    </div>
     <div class="modal fade" id="genreModal">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -198,4 +200,8 @@ const sortedGenres = computed(() => {
 })
 </script>
 
-<style scoped></style>
+<style scoped lang="scss">
+.action-btn {
+    width:  clamp(80px, 12vw, 110px);
+}
+</style>

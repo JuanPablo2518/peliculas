@@ -2,20 +2,31 @@
 This component is the form where genres can be created/updated -->
 
 <template>
-    <form @submit.prevent="submitForm" class="mb-5">
-        <div class="mb-3">
-            <label class="form-label">Nombre</label>
-            <input type="text" class="form-control" :class="{ 'is-invalid': v$.name.$error }" v-model="name">
-            <div class="invalid-feedback" v-if="v$.name.required.$invalid">
-                Por favor, ingrese un nombre
-            </div>
-            <div class="invalid-feedback" v-if="v$.name.minLength.$invalid">
-                El nombre debe ser de al menos {{ v$.name.minLength.$params.min }} caracteres.
+    <form @submit.prevent="submitForm" class="mb-4 p-4 d-flex justify-content-center">
+        <div class="p-4 w-100 w-lg-75 genres-form">
+            <label class="form-label  genres-label">Nombre de género</label>
+            <div class="d-flex flex-column genres-form-fields  flex-md-row align-items-md-start  gap-3">
+                <div class="flex-grow-1 ">
+                    <input type="text" class="form-control genres-input w-100 " :class="{ 'is-invalid': v$.name.$error }" v-model="name">
+                    <div class="invalid-feedback" v-if="v$.name.required.$invalid">
+                        Por favor, ingrese un nombre
+                    </div>
+                    <div class="invalid-feedback" v-if="v$.name.minLength.$invalid">
+                        El nombre debe ser de al menos {{ v$.name.minLength.$params.min }} caracteres.
+                    </div>
+                </div>
+                <button class="btn btn-yellow flex-shrink-0">
+                    <font-awesome-icon
+                      class="me-1 responsive-icon "
+                      icon="fa-solid fa-plus"
+                    />
+                    <span>Guardar</span>
+                </button>
+                <button type="button" class="btn btn-danger flex-shrink-0" @click="cancelEdit" v-if="props.genre">
+                    <span>Cancelar Edición</span>
+                </button>
             </div>
         </div>
-        <button class="btn btn-primary">Guardar</button>
-        <button type="button" class="btn btn-danger" @click="cancelEdit" v-if="props.genre">Cancelar
-            Edicion</button>
     </form>
 </template>
 
@@ -101,4 +112,29 @@ watch(() => props.genre, (newGenre) => {
 })
 </script>
 
-<style scoped></style>
+<style scoped lang="scss">
+@use 'sass:color';
+@use '@/assets/scss/abstracts/variables' as *;
+@use '@/assets/scss/abstracts/mixins' as *;
+
+.genres-form {
+    background-color: color.adjust($color: $secondary-color,  $lightness: 4%);
+    border-radius: 20px;
+}
+
+.genres-input {
+    border: 2px solid color.adjust($color: $secondary-color,  $lightness: 15%);
+
+    &:focus {
+        border: 2px solid $primary-color;
+    }
+}
+
+.genres-label {
+    color: color.adjust($color: $secondary-color,  $lightness: 50%);
+}
+
+
+
+
+</style>

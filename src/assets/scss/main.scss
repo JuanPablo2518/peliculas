@@ -10,6 +10,11 @@ body {
     background-color: $secondary-color;
 }
 
+input::placeholder {
+    color: white;
+    opacity: 1;
+}
+
 input.form-control,
 textarea.form-control,
 select.form-select {
@@ -35,7 +40,7 @@ select.form-select {
 }
 
 .table {
-    border-collapse: separate;  // ← necesario para que funcione border-radius
+    border-collapse: separate;  
     border-spacing: 0;          
     border-radius: 5px;
     overflow: hidden;
@@ -43,9 +48,16 @@ select.form-select {
 
     td{
         color: white;
-        border: 2px solid color.adjust($secondary-color, $lightness: +10%);
+        border-bottom: 2px solid color.adjust($secondary-color, $lightness: +10%);
         background-color: $secondary-color;
         padding: 0  ;
+
+        &:first-child {
+            border-left: 2px solid color.adjust($secondary-color, $lightness: +10%);
+        }
+        &:last-child {
+            border-right: 2px solid color.adjust($secondary-color, $lightness: +10%);
+        }
     }
 
     th {
@@ -63,6 +75,41 @@ select.form-select {
         background-color: color.adjust($secondary-color, $lightness: +5%);
     }
 }
+
+.btn {
+    color: $text-light;
+    font-weight: 700;
+}
+
+.btn-yellow {
+    background-color: $primary-color;
+
+        &:hover {
+        background-color: color.adjust($primary-color, $lightness: -10%);
+        color: $text-light
+    }
+}
+
+.responsive-icon {
+     font-size: clamp(0.85rem, 1.5vw, 2rem);
+}
+
+@each $breakpoint, $width-value in (
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px
+) {
+  @media (min-width: $width-value) {
+    .w-#{$breakpoint}-25   { width: 25% !important; }
+    .w-#{$breakpoint}-50   { width: 50% !important; }
+    .w-#{$breakpoint}-75   { width: 75% !important; }
+    .w-#{$breakpoint}-90   { width: 90% !important; }
+    .w-#{$breakpoint}-100  { width: 100% !important; }
+    .w-#{$breakpoint}-auto { width: auto !important; }
+  }
+}
+
 
 
 

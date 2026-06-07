@@ -51,6 +51,39 @@ export const getTMDBDetails = async (id) => {
   }
 };
 
+export const searchTMDBActors = async (query) => {
+  if (!query) return [];
+
+  try {
+    const response = await fetch(
+      `${BASE_URL}/search/person?api_key=${API_KEY}&query=${query}&language=es-ES`,
+    );
+    const data = await response.json();
+    return data.results;
+  } catch (error) {
+    toast.error("Error buscando el actor: " + convertErrors(error.code));
+  }
+};
+
+/**
+ * Method to retrieve the details of a specific movie by its ID
+ * If successful, it returns all the data of the movie; in case of an error, it returns null
+ */
+
+export const getTMDBActorsDetails = async (id) => {
+  try {
+    const response = await fetch(
+      `${BASE_URL}/person/${id}?api_key=${API_KEY}&language=es-ES&append_to_response=credits`,
+    );
+    return await response.json();
+  } catch (error) {
+    toast.error(
+      "Error obteniendo detalles de TMDB: " + convertErrors(error.code),
+    );
+    return null;
+  }
+};
+
 /**
  * Method to get the trailer of a movie from TMDB by its ID
  * First, it looks for a trailer in Latin American Spanish; if not found, it then searches for the trailer in English

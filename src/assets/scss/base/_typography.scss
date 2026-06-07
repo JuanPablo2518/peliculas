@@ -5,17 +5,19 @@ $font-base: 'Roboto', sans-serif;
 $font-display: 'Raleway', serif;
 
 
-h1, h2, h3, h4, p, a, li, label {
+h1, h2, h3, h4, h5,  p, a, li, label {
     color: $text-light;
 }
 h1 {  
     font-family: $font-display;
-    font-size: clamp(1.20rem, 2.9vw, 1.95rem);
+      font-weight: 800;
+    font-size: clamp(1.8rem, 3vw, 3.6rem);
 }
+
 
 h2 {  
     font-family: $font-display;
-    font-size: clamp(1.05rem, 2.7vw, 1.75rem);
+    font-size: clamp(1.10rem, 2.9vw, 1.95rem);
 }
 
 h3 {  
@@ -28,9 +30,9 @@ h4 {
     font-size: clamp(0.75rem, 2.3vw, 1.35rem);
 }
 
-p, li, a, label {  
+p, li, a, label, span, td {  
     font-family: $font-base;
-    font-size: clamp(0.55rem, 1.85vw, 1.05rem);
+    font-size: clamp(0.80rem, 1.85vw, 1.05rem);
 }
 
 a, a:visited, a:hover {

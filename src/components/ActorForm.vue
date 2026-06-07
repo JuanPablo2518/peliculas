@@ -1,16 +1,36 @@
 <!-- ActorForm component
 This component is the form where actors can be created/updated -->
 <template>
+    <div class="tmdb-search-container my-5 p-4  rounded shadow-sm ">
+        <label class="form-label fw-bold">Buscar en TMDB para autocompletar</label>
+        <div class="position-relative">
+            <input type="text" class="form-control color-white" placeholder="Escribe el nombre del actor" v-model="tmdbSearchTerm" @input="searchInTMDB">
+            <div class="list-group mt-1 position-absolute w-100 shadow" v-if="tmdbResults?.length" style="z-index: 1000;">
+                <button type="button" v-for="res in tmdbResults" :key="res.id" class="tmdb-search-button list-group-item list-group-item-action d-flex align-items-center" @click="selectTMDBActor(res.id)">
+                    <img :src=" res.profile_path ? 'https://image.tmdb.org/t/p/w92' + res.profile_path : 'https://png.pngtree.com/png-vector/20221010/ourmid/pngtree-actors-icon-png-image_6293100.png'" class="me-3 rounded" style="width: 40px;">
+                    <div>
+                        <p class="d-inline">
+                            {{ res.name }} 
+                        </p> 
+                        <br>
+                        <small class="text-muted">{{ res.dateOfBirth }}</small>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <form @submit.prevent="submitForm" class="mb-5">
         <div class="mb-3">
             <label class="form-label">Nombre</label>
-            <input type="text" class="form-control" :class="{ 'is-invalid': v$.name.$error }" v-model="name">
+            <input type="text" class="form-control mb-1" :class="{ 'is-invalid': v$.name.$error }" v-model="name">
             <div class="invalid-feedback" v-if="v$.name.required.$invalid">
                 Por favor, ingrese un nombre
             </div>
-            <div class="invalid-feedback" v-if="v$.name.minLength.$invalid">
+            <div class="invalid-feedback " v-if="v$.name.minLength.$invalid">
                 El nombre debe ser de al menos {{ v$.name.minLength.$params.min }} caracteres.
             </div>
+            <p  v-if="resetTMDBPopularity">El campo "Popularidad TMDB" a sido eliminado: <a class="text-decoration-underline" style="cursor:pointer" @click="restoreTMDB" >Reestablecer</a></p>
         </div>
 
         <div class="mb-3">
@@ -85,8 +105,6 @@ This component is the form where actors can be created/updated -->
 
         <div class="d-flex gap-3">
             <button class="btn save-button">Guardar</button>
-            <button type="button" class="btn btn-danger" @click="cancelEdit" v-if="props.actor">Cancelar
-                Edicion</button>
         </div>
     </form>
 </template>
@@ -99,15 +117,14 @@ import { between, minLength, required, requiredIf, url } from '@vuelidate/valida
 import { useToast } from 'vue-toastification';
 // Services
 import { getActors } from '@/services/actorService';
+import { searchTMDBActors, getTMDBActorsDetails } from '@/services/tmdbService';
 
 
 // COMPOSABLES
 const toast = useToast();
 
 // PROPS
-const props = defineProps({
-    actor: Object
-})
+
 
 // Constants
 
@@ -127,7 +144,14 @@ const enabledDD = ref(false)
 const gender = ref('')
 const birthLocation = ref('')
 const tmdbPopularity = ref(0)
+const tmdbId = ref(null)
 const photo = ref("")
+
+const tmdbSearchTerm = ref('')
+const tmdbResults = ref([])
+const resetTMDBPopularity = ref(false)
+const tmdbOriginalName = ref(null)
+
 // COMPUTED
 const yearBirthDate = computed(() => Number(dateOfBirth.value.split("-")[0]))
 const yearDeathDate = computed(() => Number(dateOfDeath.value.split("-")[0]))
@@ -169,12 +193,10 @@ const submitForm = async () => {
     const actors = await getActors()
 
 
-    if (props.actor?.name !== name.value) {
         if (actors.find(a => a.name.trim().toLowerCase() === name.value.trim().toLowerCase())) {
             toast.warning("El actor ingresado ya existe.")
             return
         }
-    }
 
     emit('save', {
         name: name.value,
@@ -184,6 +206,7 @@ const submitForm = async () => {
         gender: gender.value,
         birthLocation: birthLocation.value,
         tmdbPopularity: tmdbPopularity.value,
+        tmdbId: tmdbId.value, 
         photo: photo.value
     })
 
@@ -191,11 +214,38 @@ const submitForm = async () => {
     v$.value.$reset()
 }
 
-const cancelEdit = () => {
-    resetForm()
-    v$.value.$reset()
-    emit('cancel')
+const searchInTMDB = async () => {
+    if (tmdbSearchTerm.value.length < 3) {
+        tmdbResults.value = []
+        return
+    }
+    tmdbResults.value = await searchTMDBActors(tmdbSearchTerm.value)
 }
+
+const selectTMDBActor = async (id) => {
+    const a = await getTMDBActorsDetails(id)
+
+    if (!a) {
+        toast.error("No se pudieron cargar los detalles de este actor.");
+        return;
+    }
+
+    name.value = a.name
+    tmdbOriginalName.value = a.name
+    biography.value = a.biography
+    dateOfBirth.value = a.birthday || ""
+    dateOfDeath.value = a.deathday || ""
+    gender.value = a.gender !== 2 ? "F" : "M"
+    birthLocation.value = a.place_of_birth
+    tmdbPopularity.value = a.popularity
+    photo.value = a.profile_path ? `https://image.tmdb.org/t/p/w500${a.profile_path}` : ""
+    tmdbId.value = id
+
+
+    tmdbResults.value = []
+    tmdbSearchTerm.value = ''
+}
+
 
 const resetForm = () => {
     name.value = ""
@@ -205,27 +255,39 @@ const resetForm = () => {
     gender.value = ""
     birthLocation.value = ""
     tmdbPopularity.value = ""
+    tmdbId.value = null;
     photo.value = ""
+}
+
+const restoreTMDB = async () => {
+    const actorToRestore = await searchTMDBActors(tmdbOriginalName.value)
+
+    if (!actorToRestore) return
+
+    name.value = actorToRestore[0].name
+    tmdbPopularity.value = actorToRestore[0].popularity
+    tmdbId.value = actorToRestore[0].id
+    resetTMDBPopularity.value = false
 }
 
 // WATCHERS
 
-// Watch used to assign the actor prop value after it loads
-watch(() => props.actor, (newActor) => {
-    if (newActor) {
-        name.value = newActor.name
-        biography.value = newActor.biography
-        dateOfBirth.value = newActor.dateOfBirth
-        dateOfDeath.value = newActor.dateOfDeath
-        gender.value = newActor.gender
-        birthLocation.value = newActor.birthLocation
-        tmdbPopularity.value = newActor.tmdbPopularity
-        photo.value = newActor.photo
-    }
-})
+
 
 watch(enabledDD, (value) => {
     if (!value) dateOfDeath.value = ""
+})
+
+watch(name, (newValue) => {
+    if (!tmdbId.value) return
+
+    const nameChanged = newValue !== tmdbOriginalName.value
+    resetTMDBPopularity.value = nameChanged
+
+    if (nameChanged) {
+        tmdbId.value = null
+        tmdbPopularity.value = null
+    }
 })
 
 </script>
@@ -263,5 +325,25 @@ watch(enabledDD, (value) => {
         color: $text-light;
     }
 
+}
+
+input::placeholder {
+    color: rgb(233, 226, 226);
+    opacity: 0.5;
+}
+
+.tmdb-search-container {
+    border: 2px solid $primary-color
+}
+
+.tmdb-search-button {
+    background-color: $secondary-color;
+    border: 2px solid $primary-color;
+    border-top: 0;
+    color: white;
+}
+
+.tmdb-search-button:first-child{
+    border-top: 0px solid red ;
 }
 </style>
