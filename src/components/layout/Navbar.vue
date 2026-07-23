@@ -1,101 +1,124 @@
 <!-- NAVBAR PAGE -->
 
 <template>
-    <nav class="header navbar navbar-expand-lg " data-bs-theme="dark">
-        <div class="container">
-            <router-link to="/peliculas" class="header-title navbar-brand" href="#">Filmados!</router-link>
+  <nav class="header navbar navbar-expand-lg" data-bs-theme="dark">
+    <div class="container">
+      <router-link to="/peliculas" class="header-title navbar-brand" href="#"
+        >Filmados!</router-link
+      >
 
-            <!-- HAMBURGER MENU MODE FOR MOBILE DEVICES -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
-                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+      <!-- HAMBURGER MENU MODE FOR MOBILE DEVICES -->
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNavAltMarkup"
+        aria-controls="navbarNavAltMarkup"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-            <!-- LINK MENU FOR NAVIGATING BETWEEN DIFFERENT ROUTES -->
-            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                <div class="header-links navbar-nav ms-auto">
-                    <router-link class="nav-link active" to="/peliculas">Películas</router-link>
-                    <router-link v-if="isAdmin" class="nav-link active" to="/actores">Actores</router-link>
-                    <router-link v-if="isAdmin" class="nav-link active" to="/generos">Géneros</router-link>
-                    <router-link v-if="isAdmin" class="nav-link active" to="/ingreso">Ingresar</router-link>
+      <!-- LINK MENU FOR NAVIGATING BETWEEN DIFFERENT ROUTES -->
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="header-links navbar-nav ms-auto">
+          <router-link class="nav-link active" to="/peliculas"
+            >Películas</router-link
+          >
+          <router-link v-if="isAdmin" class="nav-link active" to="/actores"
+            >Actores</router-link
+          >
+          <router-link v-if="isAdmin" class="nav-link active" to="/generos"
+            >Géneros</router-link
+          >
+          <router-link v-if="isAdmin" class="nav-link active" to="/ingreso"
+            >Ingresar</router-link
+          >
 
-                    <!-- No User links -->
-                    <template v-if="!user">
-                        <div class="navbar-nav ms-auto">
-                            <router-link class="nav-link" to="/registrar">Registrarse</router-link>
-                            <router-link class="nav-link" to="/login">Login</router-link>
-                        </div>
-                    </template>
-
-                    <!-- With user links -->
-                    <template v-else>
-                        <span class="nav-link me-3">Bienvenido: {{ name }}</span>
-                        <button @click="logOut" to="/peliculas" class="btn btn-outline-light">Cerrar
-                            sesión</button>
-                    </template>
-                </div>
+          <!-- No User links -->
+          <template v-if="!user">
+            <div class="navbar-nav ms-auto">
+              <router-link class="nav-link" to="/registrar"
+                >Registrarse</router-link
+              >
+              <router-link class="nav-link" to="/login">Login</router-link>
             </div>
+          </template>
+
+          <!-- With user links -->
+          <template v-else>
+            <span class="nav-link me-3">Bienvenido: {{ name }}</span>
+            <button
+              @click="logOut"
+              to="/peliculas"
+              class="btn btn-outline-light"
+            >
+              Cerrar sesión
+            </button>
+          </template>
         </div>
-    </nav>
+      </div>
+    </div>
+  </nav>
 </template>
 
 <script setup>
 // VUE LIBRARIES
-import { computed } from 'vue';
+import { computed } from "vue";
 // STORE
-import { useLoginStore } from '@/stores/loginStore';
+import { useLoginStore } from "@/stores/loginStore";
 // SERVICES
-import { logout } from '@/services/authService';
-import { useRouter } from 'vue-router';
+import { logout } from "@/services/authService";
+import { useRouter } from "vue-router";
 
 // COMPOSABLES
 
-const router = useRouter()
+const router = useRouter();
 
 // VARIABLES
-const loginStore = useLoginStore()
-const user = computed(() => loginStore.user)
+const loginStore = useLoginStore();
+const user = computed(() => loginStore.user);
 const name = computed(() => {
-    return loginStore.userProfile?.name || ''
-})
+  return loginStore.userProfile?.name || "";
+});
 
 // COMPUTED
 
-const isAdmin = computed(() => loginStore.role === 'admin')
-
+const isAdmin = computed(() => loginStore.role === "admin");
 
 //METHODS
 
-/** 
+/**
  * Method that confirms whether the user wants to log out
  * If so, it calls the logout method
-*/
+ */
 const logOut = async () => {
-    if (!confirm('¿Está seguro de que desea cerrar sesión?')) return
-    await logout()
-    loginStore.logout()
-    router.push('/peliculas')
-}
+  if (!confirm("¿Está seguro de que desea cerrar sesión?")) return;
+  await logout();
+  loginStore.logout();
+  router.push("/peliculas");
+};
 </script>
 
 <style scoped lang="scss">
-@use '@/assets/scss/abstracts/variables' as *;
-@use '@/assets/scss/abstracts/mixins' as *;
+@use "@/assets/scss/abstracts/variables" as *;
+@use "@/assets/scss/abstracts/mixins" as *;
 
 .header {
-    background-color: $secondary-color;
-    border-bottom: 6px solid $primary-color;
+  background-color: $secondary-color;
+  border-bottom: 6px solid $primary-color;
 }
 
 .header-title {
-    color: $text-light;
-    text-decoration: underline;
-    text-underline-offset: 6px;
-    text-decoration-color: $primary-color;
+  color: $text-light;
+  text-decoration: underline;
+  text-underline-offset: 6px;
+  text-decoration-color: $primary-color;
 }
 
 .header-links a {
-    color: $text-light;
-    @include underline-animation($text-light, 5px);
+  color: $text-light;
+  @include underline-animation($text-light, 5px);
 }
 </style>

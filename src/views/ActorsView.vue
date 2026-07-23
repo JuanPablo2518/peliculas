@@ -6,12 +6,21 @@
 
   <ActorForm @save="saveActor" @cancel="resetForm" />
 
-  <button
-    class="btn btn-success mb-3"
-    @click="activeFilter = activeFilter === 'asc' ? 'desc' : 'asc'"
-  >
-    Ordenar: {{ activeFilter === "asc" ? "A - Z" : "Z - A" }}
-  </button>
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <div class="d-flex gap-3">
+      <h5 class="m-0">Listado</h5>
+      <p class="small border border-2 rounded px-3">
+        {{ actors.length }} géneros
+      </p>
+    </div>
+    <button
+      class="btn btn-outline-light"
+      @click="activeFilter = activeFilter === 'asc' ? 'desc' : 'asc'"
+    >
+      <font-awesome-icon icon="fa-solid fa-up-down" />
+      {{ activeFilter === "asc" ? "A <- Z" : "Z -> A" }}
+    </button>
+  </div>
 
   <!-- Table of actors -->
   <table class="table table-striped mb-5">
@@ -101,13 +110,19 @@
                 <!-- INFORMACIÓN BÁSICA -->
                 <div class="mb-4">
                   <p class="border-bottom pb-1">
-                    <font-awesome-icon class="me-1" icon="fa-solid fa-address-card" />
+                    <font-awesome-icon
+                      class="me-1"
+                      icon="fa-solid fa-address-card"
+                    />
                     INFORMACION BASICA
                   </p>
 
                   <div class="d-flex flex-column mb-3">
                     <p class="mb-2">
-                      <font-awesome-icon class="me-1 actor-icon" icon="fa-solid fa-user" />
+                      <font-awesome-icon
+                        class="me-1 actor-icon"
+                        icon="fa-solid fa-user"
+                      />
                       Nombre
                     </p>
                     <p v-if="editingActor !== actor.id" class="mb-0">
@@ -125,7 +140,10 @@
 
                   <div class="d-flex flex-column mb-3">
                     <p class="mb-2">
-                      <font-awesome-icon class="me-1 actor-icon" icon="fa-solid fa-book" />
+                      <font-awesome-icon
+                        class="me-1 actor-icon"
+                        icon="fa-solid fa-book"
+                      />
                       Biografia
                     </p>
                     <p class="mb-0" v-if="editingActor !== actor.id">
@@ -144,11 +162,14 @@
                 <!-- FECHAS -->
                 <div class="mb-4">
                   <p class="border-bottom pb-1 color-white">
-                    <font-awesome-icon class="me-1" icon="fa-solid fa-calendar" />
+                    <font-awesome-icon
+                      class="me-1"
+                      icon="fa-solid fa-calendar"
+                    />
                     FECHAS
                   </p>
                   <div class="d-flex row w-100">
-                    <div class="d-flex flex-column mb-3 col-6">
+                    <div class="d-flex flex-column mb-3 col-12 col-md-6">
                       <p class="mb-2">
                         <font-awesome-icon
                           class="actor-icon"
@@ -168,7 +189,7 @@
                       />
                     </div>
 
-                    <div class="d-flex flex-column mb-3 col-6">
+                    <div class="d-flex flex-column mb-3 col-12 col-md-6">
                       <p class="mb-2">
                         <font-awesome-icon
                           class="actor-icon"
@@ -193,7 +214,10 @@
                 <!-- OTROS DATOS -->
                 <div class="mb-4">
                   <p class="border-bottom pb-1 color-white">
-                    <font-awesome-icon class="me-1" icon="fa-solid fa-newspaper" />
+                    <font-awesome-icon
+                      class="me-1"
+                      icon="fa-solid fa-newspaper"
+                    />
                     OTROS DATOS
                   </p>
 
@@ -410,23 +434,7 @@ const removeActor = async (id) => {
   toast.success("Se ha eliminado correctamente el actor.");
 };
 
-const sortedActors = computed(() => {
-  const copy = [...actors.value];
 
-  if (!activeFilter.value) return copy;
-
-  copy.sort((a, b) => {
-    const nameA = a.name.toLowerCase();
-    const nameB = b.name.toLowerCase();
-
-    if (activeFilter.value === "asc") {
-      return nameA.localeCompare(nameB);
-    } else {
-      return nameB.localeCompare(nameA);
-    }
-  });
-  return copy;
-});
 </script>
 
 <style scoped lang="scss">

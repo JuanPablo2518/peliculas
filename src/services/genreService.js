@@ -52,8 +52,7 @@ export const getGenres = async () => {
     }));
   } catch (error) {
     toast.error(
-      "Ha ocurrido un error al cargar los generos: " +
-        convertErrors(error.code),
+      "Ha ocurrido un error al cargar los generos: " + convertErrors(error),
     );
   }
 };

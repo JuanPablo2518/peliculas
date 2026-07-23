@@ -47,18 +47,27 @@
     <div v-if="trailerKey" class="my-5">
       <h5 class="fw-bold mb-3">Tráiler oficial</h5>
       <div class="ratio ratio-16x9 shadow-sm rounded overflow-hidden">
-        <iframe :src="'https://www.youtube.com/embed/' + trailerKey" title="Youtube video player" frameborder="0" allow="
+        <iframe
+          :src="'https://www.youtube.com/embed/' + trailerKey"
+          title="Youtube video player"
+          frameborder="0"
+          allow="
             accelerometer;
             autoplay;
             clipboard-write;
             encrypted-media;
             gyroscope;
             picture-in-picture;
-          " allowfullscreen=""></iframe>
+          "
+          allowfullscreen=""
+        ></iframe>
       </div>
     </div>
 
-    <div v-else class="p-5 mb-5 containter d-flex justify-content-center align-items-center">
+    <div
+      v-else
+      class="p-5 mb-5 containter d-flex justify-content-center align-items-center"
+    >
       <h1>==== TRAILER NO DISPONIBLE ====</h1>
     </div>
 
@@ -75,7 +84,11 @@
         <!-- Movie Cast -->
         <h5 class="fw-bold">Reparto</h5>
         <ul class="list-group list-group-flush">
-          <li class="list-group-item" v-for="actor in filteredActors" :key="actor.id">
+          <li
+            class="list-group-item"
+            v-for="actor in filteredActors"
+            :key="actor.id"
+          >
             {{ actor.name }}
           </li>
         </ul>
@@ -98,9 +111,8 @@
         <!-- Movie Backdrop -->
         <div v-if="movie.backdrop">
           <h5 class="fw-bold">Imagen de fondo</h5>
-          <img :src="movie.backdrop" :alt="movie.name">
+          <img :src="movie.backdrop" :alt="movie.name" />
         </div>
-
 
         <!-- Movie Budget -->
         <h5 class="fw-bold">Presupuesto (USD)</h5>
@@ -149,10 +161,18 @@
 
           <!-- Rate Container -->
           <div class="mb-3">
-            <label class="form-label d-block text-muted small uppercase">Calificación</label>
+            <label class="form-label d-block text-muted small uppercase"
+              >Calificación</label
+            >
             <div class="btn-group" role="group">
-              <button v-for="n in 10" :key="n" type="button" class="btn btn-sm" :class="n <= rating ? 'btn-warning' : 'btn-outline-secondary'
-                " @click="rating = n">
+              <button
+                v-for="n in 10"
+                :key="n"
+                type="button"
+                class="btn btn-sm"
+                :class="n <= rating ? 'btn-warning' : 'btn-outline-secondary'"
+                @click="rating = n"
+              >
                 ⭐
               </button>
             </div>
@@ -160,8 +180,12 @@
 
           <!-- Opinion text input -->
           <div class="mb-3">
-            <textarea class="form-control border-0" rows="3" placeholder="Escribe tu opinión acerca de esta película."
-              v-model="newReview"></textarea>
+            <textarea
+              class="form-control border-0"
+              rows="3"
+              placeholder="Escribe tu opinión acerca de esta película."
+              v-model="newReview"
+            ></textarea>
           </div>
 
           <!-- Submit Opinion button -->
@@ -175,25 +199,62 @@
           <p class="mb-2">
             Para dejar una reseña, primero debes iniciar sesión.
           </p>
-          <router-link :to="`/login?redirect=/peliculas/${movie.id}`" class="btn btn-outline-primary btn-sm">Iniciar
-            sesión</router-link>
+          <router-link
+            :to="`/login?redirect=/peliculas/${movie.id}`"
+            class="btn btn-outline-primary btn-sm"
+            >Iniciar sesión</router-link
+          >
         </div>
 
         <div class="d-flex gap-2 mb-3">
-          <button class="btn btn-sm" :class="activeFilter === 'newToOld' ? 'btn-primary' : 'btn-outline-secondary'"
-            @click="activeFilter = 'newToOld'">Mas recientes</button>
-          <button class="btn btn-sm" :class="activeFilter === 'oldToNew' ? 'btn-primary' : 'btn-outline-secondary'"
-            @click="activeFilter = 'oldToNew'">Mas antiguas</button>
-          <button class="btn btn-sm" :class="activeFilter === 'likes' ? 'btn-primary' : 'btn-outline-secondary'"
-            @click="activeFilter = 'likes'">Mas likes</button>
+          <button
+            class="btn btn-sm"
+            :class="
+              activeFilter === 'newToOld'
+                ? 'btn-primary'
+                : 'btn-outline-secondary'
+            "
+            @click="activeFilter = 'newToOld'"
+          >
+            Mas recientes
+          </button>
+          <button
+            class="btn btn-sm"
+            :class="
+              activeFilter === 'oldToNew'
+                ? 'btn-primary'
+                : 'btn-outline-secondary'
+            "
+            @click="activeFilter = 'oldToNew'"
+          >
+            Mas antiguas
+          </button>
+          <button
+            class="btn btn-sm"
+            :class="
+              activeFilter === 'likes' ? 'btn-primary' : 'btn-outline-secondary'
+            "
+            @click="activeFilter = 'likes'"
+          >
+            Mas likes
+          </button>
         </div>
 
         <!-- User opinions section -->
-        <div v-if="sortedReviews.length > 0" class="list-group list-group-flush shadow-sm rounder border">
-          <div v-for="review in sortedReviews" :id="review.id" class="list-group-item p-4">
+        <div
+          v-if="sortedReviews.length > 0"
+          class="list-group list-group-flush shadow-sm rounder border"
+        >
+          <div
+            v-for="review in sortedReviews"
+            :id="review.id"
+            class="list-group-item p-4"
+          >
             <div class="d-flex justify-content-between align-items-center mb-2">
               <strong class="text-primary">{{ review.userName }}</strong>
-              <span class="badge bg-warning text-dark">⭐ {{ review.rating }} / 10</span>
+              <span class="badge bg-warning text-dark"
+                >⭐ {{ review.rating }} / 10</span
+              >
             </div>
 
             <p class="mb-1 text-secondary italic">"{{ review.comment }}"</p>
@@ -203,15 +264,24 @@
               }}</small>
               <div class="d-flex gap-2">
                 <p>{{ review.likesCount }}</p>
-                <button v-if="user" @click="toggleLike(review.id)" class="btn btn-primary btn-sm">{{ hasLike(review.id)
-                  ? "Unlike" :
-                  "Like" }}</button>
-                <button v-if="isAdmin" @click="removeReview(review.id)" class="btn btn-danger btn-sm">Borrar</button>
+                <button
+                  v-if="user"
+                  @click="toggleLike(review.id)"
+                  class="btn btn-primary btn-sm"
+                >
+                  {{ hasLike(review.id) ? "Unlike" : "Like" }}
+                </button>
+                <button
+                  v-if="isAdmin"
+                  @click="removeReview(review.id)"
+                  class="btn btn-danger btn-sm"
+                >
+                  Borrar
+                </button>
               </div>
             </div>
           </div>
         </div>
-
 
         <div v-else class="text-center py-5">
           <p class="text-muted">
@@ -234,7 +304,11 @@ import { getTMDBTrailer } from "@/services/tmdbService";
 import { getMovies } from "@/services/movieService";
 import { getActors } from "@/services/actorService";
 import { getGenres } from "@/services/genreService";
-import { deleteReview, saveReview, subscribeReviews } from "@/services/reviewService";
+import {
+  deleteReview,
+  saveReview,
+  subscribeReviews,
+} from "@/services/reviewService";
 import { addLike, removeLike, subscribeLikes } from "@/services/likeService";
 // Store
 import { useLoginStore } from "@/stores/loginStore";
@@ -247,18 +321,19 @@ const route = useRoute();
 const router = useRouter();
 const toast = useToast();
 const loginStore = useLoginStore();
-const movieStore = useMoviesStore()
+const movieStore = useMoviesStore();
 
 // Lets
 let unsubscribe;
 let unsubscribeLikes;
 
-// Const 
-const hasLike = (reviewId) => movieStore.likesId.find(l => l.reviewId === reviewId)
+// Const
+const hasLike = (reviewId) =>
+  movieStore.likesId.find((l) => l.reviewId === reviewId);
 
 // Refs
 const newReview = ref("");
-const activeFilter = ref("newToOld")
+const activeFilter = ref("newToOld");
 const rating = ref(5);
 
 const loading = ref(true);
@@ -275,7 +350,7 @@ const movie = ref(null);
 // Computed
 const user = computed(() => loginStore.user);
 const userProfile = computed(() => loginStore.userProfile);
-const isAdmin = computed(() => loginStore.role === 'admin')
+const isAdmin = computed(() => loginStore.role === "admin");
 
 /**
  * Function to filter reviews
@@ -283,26 +358,26 @@ const isAdmin = computed(() => loginStore.role === 'admin')
  * Then, it checks the type of filter to apply using an if statement and returns the sorted list of reviews
  */
 const sortedReviews = computed(() => {
-  const copy = [...reviews.value]
+  const copy = [...reviews.value];
 
   if (activeFilter.value === "newToOld") {
-    return copy.sort((a, b) => b.date?.toMillis() - a.date?.toMillis())
+    return copy.sort((a, b) => b.date?.toMillis() - a.date?.toMillis());
   } else if (activeFilter.value === "oldToNew") {
-    return copy.sort((a, b) => a.date?.toMillis() - b.date?.toMillis())
+    return copy.sort((a, b) => a.date?.toMillis() - b.date?.toMillis());
   } else if (activeFilter.value === "likes") {
-    return copy.sort((a, b) => (b.likesCount ?? 0) - (a.likesCount ?? 0))
+    return copy.sort((a, b) => (b.likesCount ?? 0) - (a.likesCount ?? 0));
   } else {
-    return copy
+    return copy;
   }
-})
+});
 
 // Lifecycle hooks
 
 /**
-* onMounted method used to initialize data
-* Uses the subscribeReviews method to update comments in real time
-* Additionally, it uses the filter method to find the corresponding actors and genres for each movie
-*/
+ * onMounted method used to initialize data
+ * Uses the subscribeReviews method to update comments in real time
+ * Additionally, it uses the filter method to find the corresponding actors and genres for each movie
+ */
 onMounted(async () => {
   await loadData();
 
@@ -312,18 +387,14 @@ onMounted(async () => {
 
   if (loginStore.user) {
     unsubscribeLikes = subscribeLikes(loginStore.user.uid, (likes) => {
-      movieStore.setLikes(likes)
-    })
+      movieStore.setLikes(likes);
+    });
   }
 
   filteredActors.value =
-    actors.value.filter((actor) =>
-      movie.value.actors.includes(actor.id),
-    ) || [];
+    actors.value.filter((actor) => movie.value.actors.includes(actor.id)) || [];
   filteredGenres.value =
-    genres.value.filter((genre) =>
-      movie.value.genres.includes(genre.id),
-    ) || [];
+    genres.value.filter((genre) => movie.value.genres.includes(genre.id)) || [];
 });
 
 // Method to unsubscribe when the component is unmounted
@@ -339,14 +410,13 @@ const returning = () => {
   router.back();
 };
 
-
 /**
-* Method to load all data for the selected movie to view its details
-* First, it uses a find method to locate the movie based on the movie ID from the page route
-* Then it retrieves the actors and genres data
-* If the movie has a tmdbId, its trailer will be fetched
-* In case of an error, a toast will be shown to the user
-*/
+ * Method to load all data for the selected movie to view its details
+ * First, it uses a find method to locate the movie based on the movie ID from the page route
+ * Then it retrieves the actors and genres data
+ * If the movie has a tmdbId, its trailer will be fetched
+ * In case of an error, a toast will be shown to the user
+ */
 
 const loadData = async () => {
   try {
@@ -367,35 +437,34 @@ const loadData = async () => {
       trailerKey.value = await getTMDBTrailer(movie.value.tmdbId);
     }
   } catch (error) {
-    toast.error("Error al cargar los datos: " + convertErrors(error.code));
+    toast.error("Error al cargar los datos: " + convertErrors(error));
   } finally {
     loading.value = false;
   }
 };
 
 const removeReview = async (id) => {
-  if (!confirm('¿Seguro/a de que desea eliminar esta reseña?')) return
-  await deleteReview(id)
-  toast.success("Reseña eliminado correctamente.")
-}
+  if (!confirm("¿Seguro/a de que desea eliminar esta reseña?")) return;
+  await deleteReview(id);
+  toast.success("Reseña eliminado correctamente.");
+};
 
 /**
-* Method to publish a new review
-* First, it checks that the review is not empty, returning null if it is
-* Then it uses the saveReview method to publish the review with the required data
-* In case of an error, a toast with the error will be shown to the user
-*/
+ * Method to publish a new review
+ * First, it checks that the review is not empty, returning null if it is
+ * Then it uses the saveReview method to publish the review with the required data
+ * In case of an error, a toast with the error will be shown to the user
+ */
 const sendReview = async () => {
-
-  if (reviews.value.find(u => u.userId === user.value.uid)) {
-    toast.warning("Ya has escrito una reseña en esta pelicula.")
-    return
+  if (reviews.value.find((u) => u.userId === user.value.uid)) {
+    toast.warning("Ya has escrito una reseña en esta pelicula.");
+    return;
   }
 
   if (newReview.value.trim() === "") {
-    toast.warning("Ingrese texto al campo de reseña.")
-    return
-  };
+    toast.warning("Ingrese texto al campo de reseña.");
+    return;
+  }
 
   try {
     await saveReview({
@@ -410,7 +479,7 @@ const sendReview = async () => {
     rating.value = 5;
     toast.success("¡Gracias por tu opinión!");
   } catch (error) {
-    toast.error("Error al publicar la reseña: " + convertErrors(error.code));
+    toast.error("Error al publicar la reseña: " + convertErrors(error));
   }
 };
 
@@ -422,20 +491,20 @@ const sendReview = async () => {
  */
 
 const toggleLike = async (reviewId) => {
-  const user = loginStore.user
+  const user = loginStore.user;
 
   if (!user) {
-    toast.warning("¡Debes iniciar sesión para darle me gusta a los mensajes!")
-    return
+    toast.warning("¡Debes iniciar sesión para darle me gusta a los mensajes!");
+    return;
   }
-  const like = hasLike(reviewId)
+  const like = hasLike(reviewId);
 
   if (like) {
-    await removeLike(like.id, reviewId)
+    await removeLike(like.id, reviewId);
   } else {
-    await addLike(user.uid, reviewId)
+    await addLike(user.uid, reviewId);
   }
-}
+};
 </script>
 
 <style scoped></style>

@@ -1,5 +1,11 @@
 // Function to convert Firebase error messages into more user-friendly text
 export function convertErrors(error) {
+  if (!error) return "Error Desconocido.";
+
+  const errorCode =
+    typeof error === "string"
+      ? error
+      : error.code || error.message || String(error);
   const messages = {
     "auth/email-already-in-use": "El email ya se encuentra en uso.",
     "auth/invalid-email": "El formato del email es inválido.",
@@ -13,7 +19,13 @@ export function convertErrors(error) {
     unavailable: "El servicio no está disponible.",
     "not-found": "Elemento no encontrado.",
     "resource-exhausted": "Se agotó la cuota de Firebase.",
+    "Failed to fetch":
+      "El servicio de TMDB no está disponible o se agotó el tiempo de espera",
+    "tmdb/service-unavailable":
+      "El servidor de TMDB esta experimentando problemas temporales (ERROR 503).",
+    "tmdb/invalid-api-key":
+      "Clave API de TMDB no valida o vencida (ERROR 401).",
   };
 
-  return messages[error] ?? error;
+  return messages[errorCode] ?? errorCode;
 }

@@ -54,8 +54,7 @@ export const getActors = async () => {
     }));
   } catch (error) {
     toast.error(
-      "Ha ocurrido un error al cargar los actores: " +
-        convertErrors(error.code),
+      "Ha ocurrido un error al cargar los actores: " + convertErrors(error),
     );
   }
 };

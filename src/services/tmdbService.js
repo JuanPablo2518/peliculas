@@ -28,7 +28,7 @@ export const searchTMDBMovies = async (query) => {
     const data = await response.json();
     return data.results;
   } catch (error) {
-    toast.error("Error buscando la película: " + convertErrors(error.code));
+    toast.error("Error buscando la película: " + convertErrors(error));
   }
 };
 
@@ -44,9 +44,7 @@ export const getTMDBDetails = async (id) => {
     );
     return await response.json();
   } catch (error) {
-    toast.error(
-      "Error obteniendo detalles de TMDB: " + convertErrors(error.code),
-    );
+    toast.error("Error obteniendo detalles de TMDB: " + convertErrors(error));
     return null;
   }
 };
@@ -61,7 +59,19 @@ export const searchTMDBActors = async (query) => {
     const data = await response.json();
     return data.results;
   } catch (error) {
-    toast.error("Error buscando el actor: " + convertErrors(error.code));
+    toast.error("Error buscando el actor: " + convertErrors(error));
+  }
+};
+
+export const getTMDBGenres = async () => {
+  try {
+    const response = await fetch(
+      `https://api.themoviedb.org/3/genre/movie/list?language=es-ES&api_key=${API_KEY}`,
+    );
+    return await response.json();
+  } catch (error) {
+    toast.error("Error obteniendo detalles de TMDB: " + convertErrors(error));
+    return null;
   }
 };
 
@@ -77,9 +87,7 @@ export const getTMDBActorsDetails = async (id) => {
     );
     return await response.json();
   } catch (error) {
-    toast.error(
-      "Error obteniendo detalles de TMDB: " + convertErrors(error.code),
-    );
+    toast.error("Error obteniendo detalles de TMDB: " + convertErrors(error));
     return null;
   }
 };
@@ -111,7 +119,7 @@ export const getTMDBTrailer = async (id) => {
       (v) => v.type === "Trailer" && v.site === "YouTube",
     )?.key;
   } catch (error) {
-    toast.error("Error obteniendo el tráiler: " + convertErrors(error.code));
+    toast.error("Error obteniendo el tráiler: " + convertErrors(error));
     return null;
   }
 };

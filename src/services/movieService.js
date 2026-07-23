@@ -45,8 +45,7 @@ export const getMovies = async () => {
     }));
   } catch (error) {
     toast.error(
-      "Ha ocurrido un error al cargar las peliculas: " +
-        convertErrors(error.code),
+      "Ha ocurrido un error al cargar las peliculas: " + convertErrors(error),
     );
   }
 };

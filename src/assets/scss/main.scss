@@ -1,115 +1,158 @@
-@use 'sass:color';
-@use 'base/reset';
-@use 'base/typography';
+@use "sass:color";
+@use "base/reset";
+@use "base/typography";
 
-@use '@/assets/scss/abstracts/variables' as *;
-@use '@/assets/scss/abstracts/mixins' as *;
-
+@use "@/assets/scss/abstracts/variables" as *;
+@use "@/assets/scss/abstracts/mixins" as *;
 
 body {
-    background-color: $secondary-color;
+  background-color: $secondary-color;
 }
 
 input::placeholder {
-    color: white;
-    opacity: 1;
+  color: white;
+  opacity: 1;
 }
+
 
 input.form-control,
 textarea.form-control,
 select.form-select {
-    background-color: $secondary-color;
+  background-color: $secondary-color;
+  // width: auto;
+   border: 2px solid color.adjust($color: $secondary-color, $lightness: 15%);
+  color: $text-light;
+  --bs-form-select-bg-img: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/></svg>");
+
+  &:disabled {
+    background-color: color.adjust($secondary-color, $lightness: -10%);
+    color: #aaa;
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  &:focus {
+    outline: none;
     border: 2px solid $primary-color;
+    background-color: $secondary-color;
+    border-color: $primary-color;
+    box-shadow: 0 0 0 3px rgba($primary-color, 0.2);
     color: $text-light;
-    --bs-form-select-bg-img: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/></svg>");
-
-    &:disabled {
-        background-color: color.adjust($secondary-color, $lightness: -10%);
-        color: #aaa;
-        cursor: not-allowed;
-        opacity: 0.6;
-    }
-
-    &:focus {
-        outline: none;
-        background-color: $secondary-color;
-        border-color: $primary-color;
-        box-shadow: 0 0 0 3px rgba($primary-color, 0.2);
-        color: $text-light;
-    }
-}
-
-.table {
-    border-collapse: separate;  
-    border-spacing: 0;          
-    border-radius: 5px;
-    overflow: hidden;
-    color: white;
-
-    td{
-        color: white;
-        border-bottom: 2px solid color.adjust($secondary-color, $lightness: +10%);
-        background-color: $secondary-color;
-        padding: 0  ;
-
-        &:first-child {
-            border-left: 2px solid color.adjust($secondary-color, $lightness: +10%);
-        }
-        &:last-child {
-            border-right: 2px solid color.adjust($secondary-color, $lightness: +10%);
-        }
-    }
-
-    th {
-        color: white;
-        font-weight: 700;
-    }
-
-    thead {
-    --bs-table-bg: #{$primary-color};
-    --bs-table-border-color: #{$secondary-color};    
-    --bs-table-color: #{$secondary-color};
-    }
-
-    .table-content {
-        background-color: color.adjust($secondary-color, $lightness: +5%);
-    }
-}
-
-.btn {
-    color: $text-light;
-    font-weight: 700;
-}
-
-.btn-yellow {
-    background-color: $primary-color;
-
-        &:hover {
-        background-color: color.adjust($primary-color, $lightness: -10%);
-        color: $text-light
-    }
-}
-
-.responsive-icon {
-     font-size: clamp(0.85rem, 1.5vw, 2rem);
-}
-
-@each $breakpoint, $width-value in (
-  sm: 576px,
-  md: 768px,
-  lg: 992px,
-  xl: 1200px
-) {
-  @media (min-width: $width-value) {
-    .w-#{$breakpoint}-25   { width: 25% !important; }
-    .w-#{$breakpoint}-50   { width: 50% !important; }
-    .w-#{$breakpoint}-75   { width: 75% !important; }
-    .w-#{$breakpoint}-90   { width: 90% !important; }
-    .w-#{$breakpoint}-100  { width: 100% !important; }
-    .w-#{$breakpoint}-auto { width: auto !important; }
+  }
+  &::placeholder {
+    color: color.adjust($text-light, $lightness: -30%);
   }
 }
 
+.table {
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 5px;
+  overflow: hidden;
+  color: white;
+  table-layout: fixed;
 
+  td {
+    color: white;
+    border-bottom: 2px solid color.adjust($secondary-color, $lightness: +10%);
+    background-color: $secondary-color;
+    padding: 0;
 
+    &:first-child {
+      border-left: 2px solid color.adjust($secondary-color, $lightness: +10%);
+    }
+    &:last-child {
+      border-right: 2px solid color.adjust($secondary-color, $lightness: +10%);
+    }
+  }
 
+  th {
+    color: white;
+    font-weight: 700;
+  }
+
+  thead {
+    --bs-table-bg: #{$primary-color};
+    --bs-table-border-color: #{$secondary-color};
+    --bs-table-color: #{$secondary-color};
+  }
+
+  .table-content {
+    background-color: color.adjust($secondary-color, $lightness: +5%);
+    min-width: 0;
+  }
+}
+
+.btn {
+  color: $text-light;
+  font-weight: 700;
+}
+
+.btn-yellow {
+  background-color: $primary-color;
+
+  &:hover {
+    background-color: color.adjust($primary-color, $lightness: -10%);
+    color: $text-light;
+  }
+}
+
+.color-yellow {
+  color: $primary-color; 
+  cursor: pointer;
+
+  &:hover {
+    color: $primary-color;
+  }
+}
+
+.responsive-icon {
+  font-size: clamp(0.85rem, 1.5vw, 2rem);
+}
+
+@each $breakpoint, $width-value in (sm: 576px, md: 768px, lg: 992px, xl: 1200px)
+{
+  @media (min-width: $width-value) {
+    .w-#{$breakpoint}-25 {
+      width: 25% !important;
+    }
+    .w-#{$breakpoint}-50 {
+      width: 50% !important;
+    }
+    .w-#{$breakpoint}-75 {
+      width: 75% !important;
+    }
+    .w-#{$breakpoint}-90 {
+      width: 90% !important;
+    }
+    .w-#{$breakpoint}-100 {
+      width: 100% !important;
+    }
+    .w-#{$breakpoint}-auto {
+      width: auto !important;
+    }
+  }
+}
+
+@supports selector(::-webkit-scrollbar) {
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: $secondary-color;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: color.adjust($secondary-color, $lightness: +10%);
+    border-radius: 30px;
+    &:hover {
+      background: $primary-color;
+    }
+  }
+}
+@supports not selector(::-webkit-scrollbar) {
+  * {
+    scrollbar-width: scroll;
+    scrollbar-color: color.adjust($secondary-color, $lightness: +10%)
+      $secondary-color;
+  }
+}
