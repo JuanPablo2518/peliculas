@@ -228,13 +228,7 @@ This component is the form where actors can be created/updated -->
 // VUE Libraries
 import { computed, reactive, ref, watch } from "vue";
 import useVuelidate from "@vuelidate/core";
-import {
-  between,
-  minLength,
-  required,
-  requiredIf,
-  url,
-} from "@vuelidate/validators";
+import { getActorRules } from "@/utils/validations/actorRules";
 import { useToast } from "vue-toastification";
 // Services
 import { getActors } from "@/services/actorService";
@@ -274,20 +268,7 @@ const yearBirthDate = computed(() => Number(dateOfBirth.value.split("-")[0]));
 const yearDeathDate = computed(() => Number(dateOfDeath.value.split("-")[0]));
 
 // Vuelidate
-const oneOfGender = (value) => ["M", "F"].includes(value);
-
-const rules = computed(() => ({
-  name: { required, minLength: minLength(4) },
-  biography: { minLength: minLength(50) },
-  yearBirthDate: { required, between: between(1900, actualYear) },
-  yearDeathDate: {
-    required: requiredIf(enabledDD),
-    between: enabledDD.value ? between(1900, actualYear) : {},
-  },
-  gender: { oneOfGender },
-  birthLocation: { minLength: minLength(10) },
-  photo: { url },
-}));
+const rules = getActorRules(enabledDD);
 
 const state = reactive({
   name,
@@ -298,9 +279,10 @@ const state = reactive({
   birthLocation,
   photo,
 });
-const v$ = useVuelidate(rules, state);
+const v$ = useVuelidate(rules, state, {$scope: 'create-actor'});
 
 // METHODS
+
 
 /**
  * Method used to submit the form data

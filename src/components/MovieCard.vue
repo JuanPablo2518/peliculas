@@ -46,10 +46,10 @@ This is the component for the movie cards displayed in MovieView -->
           {{ genre }}
         </p>
       </div>
-      <a href="#" class="btn btn-yellow text-white mt-auto">
-        <font-awesome-icon icon="fa-solid fa-circle-info" />
-        Ver detalles</a
-      >
+      <router-link :to="`/peliculas/${movie.id}`" class="btn btn-yellow text-white mt-auto">
+  <font-awesome-icon icon="fa-solid fa-circle-info" />
+  Ver detalles
+</router-link>
     </div>
   </div>
 </template>

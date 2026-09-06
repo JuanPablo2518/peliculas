@@ -579,7 +579,6 @@ const alternateEditingMovie = (movie) => {
   else {
     editingMovie.value = movie.id;
     selectedMovie.value = movie
-    console.log(editingMovieForm.value)
     editingMovieForm.value = JSON.parse(JSON.stringify(movie))
 
     if (!editingMovieForm.value.actors) {

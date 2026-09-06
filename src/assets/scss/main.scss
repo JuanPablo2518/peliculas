@@ -7,6 +7,7 @@
 
 body {
   background-color: $secondary-color;
+  overflow-x: hidden;
 }
 
 input::placeholder {
@@ -88,11 +89,26 @@ select.form-select {
   font-weight: 700;
 }
 
+.text-yellow {
+  color: $primary-color
+}
+
 .btn-yellow {
   background-color: $primary-color;
 
   &:hover {
     background-color: color.adjust($primary-color, $lightness: -10%);
+    color: $text-light;
+  }
+}
+
+.btn-outline-yellow {
+  background-color: $secondary-color;
+  border: 1px solid $primary-color;
+
+  &:hover {
+    background-color: color.adjust($secondary-color, $lightness: -10%);
+    border: 1px solid $primary-color;
     color: $text-light;
   }
 }

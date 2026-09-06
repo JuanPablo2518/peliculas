@@ -86,7 +86,7 @@
                   <button
                     v-if="editingActor"
                     class="btn btn-outline-light btn-sm py-2"
-                    @click="editActor(actor)"
+                    @click="editActor(editingActorForm)"
                   >
                     <font-awesome-icon
                       class="me-1"
@@ -133,9 +133,17 @@
                       v-else
                       class="form-control"
                       type="text"
-                      v-model="actor.name"
+                      v-model="editingActorForm.name"
                       :placeholder="actor.name"
+                      :class="{ 'is-invalid': v$.name.$error }"
                     />
+                              <div class="invalid-feedback" v-if="v$.name.required.$invalid">
+            Por favor, ingrese un nombre
+          </div>
+          <div class="invalid-feedback" v-if="v$.name.minLength.$invalid">
+            El nombre debe ser de al menos
+            {{ v$.name.minLength.$params.min }} caracteres.
+          </div>
                   </div>
 
                   <div class="d-flex flex-column mb-3">
@@ -152,10 +160,15 @@
                     <textarea
                       class="form-control"
                       v-else
+                      :class="{ 'is-invalid': v$.biography.$error }"
                       type="text"
-                      v-model="actor.biography"
+                      v-model="editingActorForm.biography"
                       :placeholder="actor.biography"
                     ></textarea>
+                    <div class="invalid-feedback" v-if="v$.biography.minLength.$invalid">
+            La biografia debe ser de al menos
+            {{ v$.biography.minLength.$params.min }} caracteres.
+          </div>
                   </div>
                 </div>
 
@@ -168,7 +181,7 @@
                     />
                     FECHAS
                   </p>
-                  <div class="d-flex row w-100">
+                  <div class=" row w-100">
                     <div class="d-flex flex-column mb-3 col-12 col-md-6">
                       <p class="mb-2">
                         <font-awesome-icon
@@ -184,29 +197,65 @@
                         class="form-control"
                         v-else
                         type="date"
-                        v-model="actor.dateOfBirth"
+                        v-model="editingActorForm.dateOfBirth"
                         :placeholder="actor.dateOfBirth"
+                        :class="{ 'is-invalid': v$.yearBirthDate.$error }"
                       />
+                       <div
+                class="invalid-feedback"
+                v-if="v$.yearBirthDate.required.$invalid"
+              >
+                Por favor, ingrese una fecha
+              </div>
+              <div
+                class="invalid-feedback"
+                v-if="v$.yearBirthDate.between.$invalid"
+              >
+                El año ingresado es invalido
+              </div>
                     </div>
-
-                    <div class="d-flex flex-column mb-3 col-12 col-md-6">
-                      <p class="mb-2">
+                            <div class="d-flex flex-column mb-3 col-12 col-md-6">
+                              <div :class="{ 'form-check form-switch': editingActor === actor.id }" >
+                                                     <input
+              class="form-check-input  "
+              type="checkbox"
+              id="checkNativeSwitch"
+              switch
+              v-if="editingActor === actor.id"
+              v-model="enabledDD"
+            />
+                                  <p class="mb-2">
                         <font-awesome-icon
                           class="actor-icon"
                           icon="fa-solid fa-dove"
                         />
-                        Fecha de fallecimietno
+                        Fecha de fallecimiento
                       </p>
+                              </div>
                       <p class="mb-0" v-if="editingActor !== actor.id">
                         {{ actor.dateOfDeath || "Sin registro" }}
                       </p>
                       <input
-                        class="form-control"
+                        class="form-control "
                         v-else
                         type="date"
-                        v-model="actor.dateOfDeath"
+                        v-model="editingActorForm.dateOfDeath"
+                        :class="{ 'is-invalid': v$.yearDeathDate.$error }"
                         :placeholder="actor.dateOfDeath"
+                        :disabled="!enabledDD"
                       />
+                                    <div
+                class="invalid-feedback"
+                v-if="v$.yearDeathDate.required.$invalid"
+              >
+                Por favor, ingrese una fecha
+              </div>
+              <div
+                class="invalid-feedback"
+                v-if="v$.yearDeathDate.between.$invalid"
+              >
+                El año ingresado es invalido
+              </div>
                     </div>
                   </div>
                 </div>
@@ -239,11 +288,17 @@
                       Genero
                     </p>
                     <div></div>
-                    <select class="form-select" v-model="actor.gender">
+                    <select class="form-select" v-model="editingActorForm.gender" :class="{ 'is-invalid': v$.gender.$error }">
                       <option value="">Seleccione</option>
                       <option value="M">Masculino</option>
                       <option value="F">Femenino</option>
                     </select>
+                    <div
+                class="invalid-feedback"
+                v-if="v$.gender.oneOfGender.$invalid"
+              >
+                Por favor, Seleccione un genero
+              </div>
                   </div>
 
                   <div class="d-flex flex-column mb-3">
@@ -261,9 +316,17 @@
                       class="form-control"
                       v-else
                       type="text"
-                      v-model="actor.birthLocation"
+                      v-model="editingActorForm.birthLocation"
                       :placeholder="actor.birthLocation"
+                      :class="{ 'is-invalid': v$.birthLocation.$error }"
                     />
+                    <div
+                class="invalid-feedback"
+                v-if="v$.birthLocation.minLength.$invalid"
+              >
+                El nombre debe ser de al menos
+                {{ v$.birthLocation.minLength.$params.min }} caracteres.
+              </div>
                   </div>
                 </div>
 
@@ -291,9 +354,13 @@
                   <input
                     class="form-control"
                     type="text"
-                    v-model="actor.photo"
-                    :placeholder="actor.photo"
+                    v-model="editingActorForm.photo"
+                    :placeholder="editingActorForm.photo"
+                    :class="{'is-invalid' : v$.photo.$error}"
                   />
+                  <div class="invalid-feedback" v-if="photo && v$.photo.url.$invalid">
+            La URL ingresada es incorrecta.
+          </div>
                 </div>
               </div>
             </div>
@@ -345,7 +412,7 @@
 
 <script setup>
 // VUE Libraries
-import { ref, onMounted, onUnmounted, computed } from "vue";
+import { ref, onMounted, onUnmounted, computed, watch, reactive } from "vue";
 import { useToast } from "vue-toastification";
 // Services
 import {
@@ -357,6 +424,9 @@ import {
 import { subscribeMovies } from "@/services/movieService";
 // Components
 import ActorForm from "@/components/ActorForm.vue";
+import { getMovieRules } from "@/utils/validations/movieRules";
+import { getActorRules } from "@/utils/validations/actorRules";
+import useVuelidate from "@vuelidate/core";
 
 // Composables
 const toast = useToast();
@@ -366,14 +436,56 @@ let unsubscribe;
 let unsubscribeMovies;
 
 // Refs
+const editingActorForm = ref({
+  name: '',
+  photo: '',
+  biography: '',
+  dateOfBirth: '',
+  dateOfDeath: '',
+  gender: null,
+  birthLocation: '',
+})
 const actors = ref([]);
 const movies = ref([]);
 const actorId = ref(null);
 const selectedActor = ref(null);
 const editingActor = ref("");
+const enabledDD = ref(true)
 const activeFilter = ref("");
 
+// COMPUTED
+const yearBirthDate = computed(() => Number(editingActorForm.value?.dateOfBirth?.split("-")[0]));
+const yearDeathDate = computed(() => Number(editingActorForm.value?.dateOfDeath?.split("-")[0]));
+
+
+
+const state = computed(() => {
+  return {
+  name: editingActorForm.value?.name,
+  biography: editingActorForm.value?.biography,
+  yearBirthDate: yearBirthDate.value,
+  yearDeathDate: yearDeathDate.value,
+  gender: editingActorForm.value?.gender,
+  birthLocation: editingActorForm.value?.birthLocation,
+  photo: editingActorForm.value?.photo,
+}
+});
+
+
+const rules = getActorRules(enabledDD)
+
+const v$ = useVuelidate(rules, state, {$scope: 'edit-actor'})
+
 // Computed
+
+watch(enabledDD, (value) => {
+  if (!selectedActor.value) return
+  if (!value) {
+    selectedActor.value.dateOfDeath = "";
+    editingActorForm.value.dateOfDeath = ""
+  }
+});
+
 
 const toDeleteMovies = computed(() => {
   return movies.value.filter((movie) => movie.actors.includes(actorId.value));
@@ -412,15 +524,39 @@ const saveActor = async (actor) => {
 
 // Method that activates edit mode
 const alternateEditingActor = (actor) => {
-  selectedActor.value = actor;
-  if (editingActor.value === actor.id) editingActor.value = "";
-  else editingActor.value = actor.id;
+    if (editingActor.value === actor.id) {
+    editingActor.value = "";
+    editingActorForm.value = null
+    selectedActor.value = null
+  }
+  else {
+    editingActor.value = actor.id;
+    selectedActor.value = actor
+    editingActorForm.value = JSON.parse(JSON.stringify(actor))
+
+    if(editingActorForm.value.dateOfDeath) {
+      enabledDD.value = true
+    }
+    else enabledDD.value = false
+  }
 };
 
 const editActor = async (actor) => {
-  await updateActor(actor.id, actor);
-  toast.success("Se ha editado correctamente el actor.");
-  editingActor.value = "";
+  const result = await v$.value.$validate()
+
+  if (!result) {
+    toast.error("Por favor, corrige los errores del formulario")
+    return
+  }
+
+  if (editingActorForm.value) {
+    await updateActor(actor.id, actor);  
+    toast.success("Se ha editado correctamente el actor.");
+    editingActor.value = "";
+    v$.value.$reset()
+  }
+  
+
 };
 
 /**
@@ -430,9 +566,21 @@ const editActor = async (actor) => {
  */
 
 const removeActor = async (id) => {
+    const confirmed = confirm("¿Estas seguro de que quieres eliminar esta pelicula?")
+  if (!confirmed) return
+
   await deleteActor(id, toDeleteMovies.value);
   toast.success("Se ha eliminado correctamente el actor.");
 };
+
+const sortedActors = computed(() => {
+  return [...actors.value].sort((a, b) => {
+    if (activeFilter.value === 'asc') return a.name.localeCompare(b.name);
+    if (activeFilter.value === 'desc') return b.name.localeCompare(a.name);
+    return 0;
+  });
+});
+
 
 
 </script>

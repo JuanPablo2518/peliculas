@@ -19,29 +19,66 @@
   </div>
 
   <div v-else>
+
+        <div class="modal" id="selectModal" tabindex="-1">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+      <SearchSelectModal v-if="inputSelection === 'actor'" :data="actors" :movies="movies" :type="inputSelection" @save="selectValues" />
+      <SearchSelectModal v-else :data="genres" :movies="movies" :type="inputSelection" @save="selectValues" />
+    </div>
+  </div>
     <!-- Title -->
     <h1 class="text-center my-5 fw-bold display-5">Peliculas!</h1>
     <!-- Search Filters -->
     <div class="row my-5 g-3">
-      <div class="col-md-6">
+      <div class="col-md-12">
         <!-- Search by name -->
         <input
           type="text"
-          class="form-control form-control-lg shadow-sm"
+          class="form-control form-control-lg shadow-sm "
           placeholder="Buscar peliculas"
           v-model="searchQuery"
         />
         <!-- Favorites Filter -->
-        <button
+         <div class="d-flex gap-4 ">
+                  <button
+                  
           @click="toggleFavorites"
-          class="btn btn-white border border-3 w-100 mt-3"
+          class="btn  fav-button  align-items-center w-50 py-2 mt-3 px-4 d-flex gap-3 "
         >
-          Mostrar favoritos
+        <font-awesome-icon icon="fa-solid fa-star responsive-icon" class="action-icon"  />
+          <p class="mb-0">Mostrar Favoritos</p>
         </button>
+
+              <button
+              data-bs-toggle="modal"
+            data-bs-target="#selectModal"
+          @click="inputSelection = 'actor'"
+          class="btn  btn-outline-light  align-items-center w-25  justify-content-between  mt-3 px-3 d-flex gap-3"
+        >
+        <div class="d-flex gap-3 align-items-center">
+          <font-awesome-icon icon="fa-solid fa-user responsive-icon" class="action-icon  "  />
+          <p class="mb-0">Filtrar Actores</p>
+        </div>
+
+        <font-awesome-icon icon="fa-solid fa-arrow-up-right-from-square responsive-icon" class="action-icon  "  />
+        </button>
+
+                <button
+                data-bs-toggle="modal"
+            data-bs-target="#selectModal"
+          @click="inputSelection = 'genre'"
+          class="btn  btn-outline-light  align-items-center w-25  mt-3 px-3 d-flex justify-content-between gap-3"
+        >
+        <div class="d-flex gap-3 align-items-center">
+          <font-awesome-icon icon="fa-solid fa-masks-theater responsive-icon" class="action-icon  "  />
+          <p class="mb-0" >Filtrar Generos</p>
+        </div>
+          <font-awesome-icon icon="fa-solid fa-arrow-up-right-from-square responsive-icon" class="action-icon  "  />
+        </button>
+         </div>
       </div>
 
-      <div class="col-md-3">
-        <!-- Genres Filter -->
+      <!-- <div class="col-md-3">
         <select
           class="form-select form-select-lg shadow-sm"
           multiple
@@ -55,7 +92,6 @@
       </div>
 
       <div class="col-md-3">
-        <!-- Actors Filter -->
         <select
           class="form-select form-select-lg shadow-sm"
           multiple
@@ -66,7 +102,7 @@
             {{ actor.name }}
           </option>
         </select>
-      </div>
+      </div> -->
     </div>
 
     <!-- Movies Container -->
@@ -114,6 +150,8 @@ import { getGenres } from "@/services/genreService";
 import { useMoviesStore } from "@/stores/moviesStore";
 // Utils
 import { convertErrors } from "@/utils/errorMessages";
+import SearchSelectModal from "@/components/SearchSelectModal.vue";
+
 
 // Composables
 const moviesStore = useMoviesStore();
@@ -126,15 +164,17 @@ let unsubscribe;
 const movies = ref([]);
 const actors = ref([]);
 const genres = ref([]);
-
 const searchQuery = ref("");
 const selectedGenre = ref("");
 const selectedActor = ref("");
+const inputSelection = ref("")
 
 const showingFavorites = ref(false);
 const loading = ref(true);
 
 // Computed
+
+
 
 const filterMovies = computed(() => {
   return movies.value.filter((movie) => {
@@ -154,6 +194,11 @@ const filterMovies = computed(() => {
   });
 });
 
+const selectValues = (data) => {
+    if (inputSelection.value === 'actor') selectedActor.value = data
+  else selectedGenre.value = data
+}
+
 // Lifecycle hooks
 
 // Method to start the subscription that updates data in real time when the component is mounted
@@ -172,6 +217,8 @@ onUnmounted(() => {
 });
 
 // Methods
+
+
 
 // Method to toggle between showing and not showing favorites
 
@@ -225,4 +272,31 @@ const getGenreNames = (movie) => {
 };
 </script>
 
-<style scoped></style>
+<style scoped lang="scss">
+@use "sass:color";
+@use "@/assets/scss/abstracts/variables" as *;
+@use "@/assets/scss/abstracts/mixins" as *;
+
+
+.fav-button {
+  background-color: $primary-color;
+
+  &:hover {
+    background-color: color.adjust($primary-color, $lightness: -5%);
+  }
+}
+
+.actor-button {
+  background-color: color.adjust($color: rgb(252, 92, 92),  $lightness: -20%)
+}
+
+.genre-button {
+  background-color: rgb(119, 235, 119);
+}
+
+.btn-outline-light {
+  p {
+    color: inherit;
+  }
+}
+</style>
