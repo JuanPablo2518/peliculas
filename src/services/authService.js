@@ -15,6 +15,7 @@ import {
   collection,
   getDocs,
   where,
+  limit,
 } from "firebase/firestore";
 
 // METHODS
@@ -123,7 +124,11 @@ export const getUserProfile = async (uid) => {
  */
 
 export const checkEmailExists = async (email) => {
-  const q = query(collection(db, "users"), where("email", "==", email));
+  const q = query(
+    collection(db, "users"),
+    where("email", "==", email),
+    limit(1),
+  );
   const querySnapshot = await getDocs(q);
   return !querySnapshot.empty;
 };

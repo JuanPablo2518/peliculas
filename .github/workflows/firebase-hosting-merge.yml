@@ -27,3 +27,10 @@ jobs:
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PELICULAS_843AB }}
           channelId: live
           projectId: peliculas-843ab
+
+      - name: Deploy Firestore rules
+        run: |
+          echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT_PELICULAS_843AB }}' > /tmp/gcp-key.json
+          npx firebase-tools deploy --only firestore:rules --project peliculas-843ab
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: /tmp/gcp-key.json
