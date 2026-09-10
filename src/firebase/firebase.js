@@ -15,13 +15,13 @@ const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
 const auth = getAuth(firebaseApp);
 
-// if (import.meta.env.DEV) {
-//   window.db = db;
-//   window.auth = auth;
+if (import.meta.env.DEV) {
+  window.db = db;
+  window.auth = auth;
 
-//   import("firebase/firestore").then((fs) => {
-//     window.fs = fs;
-//   });
-// }
+  import("firebase/firestore").then((fs) => {
+    window.fs = fs;
+  });
+}
 
 export { firebaseApp, db, auth };

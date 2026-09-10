@@ -3,6 +3,7 @@ import { db } from "@/firebase/firebase";
 import {
   collection,
   addDoc,
+  setDoc,
   query,
   doc,
   deleteDoc,
@@ -21,7 +22,9 @@ const reviewsCollection = collection(db, "reviews");
  */
 
 export const saveReview = async (review) => {
-  return await addDoc(reviewsCollection, {
+  const reviewId = `${review.movieId}_${review.userId}`;
+  const reviewRef = doc(db, "reviews", reviewId);
+  return await setDoc(reviewRef, {
     ...review,
     date: Timestamp.now(),
     likesCount: 0,
