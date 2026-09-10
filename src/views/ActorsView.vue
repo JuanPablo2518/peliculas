@@ -427,6 +427,7 @@ import ActorForm from "@/components/ActorForm.vue";
 import { getMovieRules } from "@/utils/validations/movieRules";
 import { getActorRules } from "@/utils/validations/actorRules";
 import useVuelidate from "@vuelidate/core";
+import { convertErrors } from "@/utils/errorMessages";
 
 // Composables
 const toast = useToast();
@@ -518,8 +519,12 @@ onUnmounted(() => {
  */
 
 const saveActor = async (actor) => {
-  createActor(actor);
-  toast.success("Se ha ingresado correctamente el actor.");
+  try {
+    await createActor(actor);
+    toast.success("Se ha ingresado correctamente el actor.");
+  } catch (error) {
+    toast.error("El ingreso ha sido invalido: " + convertErrors(error));
+  }
 };
 
 // Method that activates edit mode

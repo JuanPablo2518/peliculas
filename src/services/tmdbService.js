@@ -29,6 +29,7 @@ export const searchTMDBMovies = async (query) => {
     return data.results;
   } catch (error) {
     toast.error("Error buscando la película: " + convertErrors(error));
+    return [];
   }
 };
 
@@ -60,6 +61,7 @@ export const searchTMDBActors = async (query) => {
     return data.results;
   } catch (error) {
     toast.error("Error buscando el actor: " + convertErrors(error));
+    return [];
   }
 };
 

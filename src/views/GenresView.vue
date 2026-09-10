@@ -123,6 +123,7 @@ import {
 import { subscribeMovies } from "@/services/movieService";
 // Components
 import GeneresForm from "@/components/GenresForm.vue";
+import { convertErrors } from "@/utils/errorMessages";
 
 // Composables
 const toast = useToast();
@@ -174,15 +175,18 @@ onUnmounted(() => {
  */
 
 const saveGenre = async (genre) => {
-  if (isEditing.value) {
+  try {
+   if (isEditing.value) {
     await updateGenre(selectedGenre.value.id, genre);
     toast.success("Género actualizado correctamente.");
   } else {
-    createGenre(genre);
+    await createGenre(genre);
     toast.success("Género ingresado correctamente.");
   }
-
   resetForm();
+  } catch (error) {
+    toast.error("El ingreso ha sido invalido: " + convertErrors(error))
+  }
 };
 
 // Method that activates edit mode

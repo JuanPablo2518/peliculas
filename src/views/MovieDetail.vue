@@ -1,7 +1,8 @@
 <!-- MovieDetail Component -->
 
 <template>
-        <div class="movie-backdrop d-flex gap-5   align-items-end " :style="{backgroundImage: movie?.backdrop ? `url(${movie.backdrop})` : ''}">
+  <div v-if="!error404" >
+            <div class="movie-backdrop d-flex gap-5   align-items-end " :style="{backgroundImage: movie?.backdrop ? `url(${movie.backdrop})` : ''}">
           <div class="ms-5 ">
             <img :src="movie?.poster" :alt="movie?.name" class=" movie-poster" />
           </div>
@@ -183,280 +184,17 @@
             </div>
           </div>
         </div>
-
-
-  <!--
-  <div v-if="loading" class="mb-5 pb-5 container animate-pulse">
-    <h2 class="text-center my-5 py-5 placeholder-glow">
-      <span class="placeholder col-6 py-4 rounded"></span>
-    </h2>
-
-    <div class="row justify-content-around">
-      <div class="col-md-5 placeholder-glow mb-4">
-        <div class="placeholder rounded w-100" style="height: 600px"></div>
-      </div>
-
-      <div class="col-md-5">
-        <div class="placeholder-glow">
-          <p><span class="placeholder col-4 py-3"></span></p>
-          <h5 class="placeholder col-3"></h5>
-          <ul class="list-group list-group-flush mb-4">
-            <li class="list-group-item border-0 p-0 mb-2" v-for="n in 3">
-              <span class="placeholder col-8"></span>
-            </li>
-          </ul>
-
-          <h5 class="placeholder col-2"></h5>
-          <p>
-            <span class="placeholder col-12"></span>
-            <br />
-            <span class="placeholder col-10"></span>
-            <br />
-            <span class="placeholder col-11"></span>
-          </p>
-
-          <h5 class="placeholder col-3 mt-4"></h5>
-          <div class="placeholder rounded w-100" style="height: 150px"></div>
-        </div>
-      </div>
-    </div>
   </div>
-
-  <div class="mb-5 pb-5" v-else-if="movie">
-    <h2 class="text-center my-5 py-5 display-5 fw-bold">
-      {{ movie.name }}
-    </h2>
-    <div v-if="trailerKey" class="my-5">
-      <h5 class="fw-bold mb-3">Tráiler oficial</h5>
-      <div class="ratio ratio-16x9 shadow-sm rounded overflow-hidden">
-        <iframe
-          :src="'https://www.youtube.com/embed/' + trailerKey"
-          title="Youtube video player"
-          frameborder="0"
-          allow="
-            accelerometer;
-            autoplay;
-            clipboard-write;
-            encrypted-media;
-            gyroscope;
-            picture-in-picture;
-          "
-          allowfullscreen=""
-        ></iframe>
-      </div>
-    </div>
-
-    <div
-      v-else
-      class="p-5 mb-5 containter d-flex justify-content-center align-items-center"
-    >
-      <h1>==== TRAILER NO DISPONIBLE ====</h1>
-    </div>
-
-    <div class="row justify-content-around me-5">
-      <div class="col-5">
-        <img :src="movie.poster" :alt="movie.name" class="w-100" />
-      </div>
-      <div class="col-5">
-        <p class="mb-5 fs-1">
-          <strong>Año de estreno {{ movie.year }}</strong>
-        </p>
-        <h5 class="fw-bold">Reparto</h5>
-        <ul class="list-group list-group-flush">
-          <li
-            class="list-group-item"
-            v-for="actor in filteredActors"
-            :key="actor.id"
-          >
-            {{ actor.name }}
-          </li>
-        </ul>
-        <h5 class="fw-bold">Géneros</h5>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">
-            <p v-for="genre in filteredGenres" :key="genre.id">
-              {{ genre.name }}
-            </p>
-          </li>
-        </ul>
-        <h5 class="fw-bold">Cantidad de favoritos</h5>
-        <p>{{ movie.favsCount }}</p>
-        <h5 class="fw-bold">Sinopsis</h5>
-        <p>{{ movie.synopsis }}</p>
-
-        <div v-if="movie.backdrop">
-          <h5 class="fw-bold">Imagen de fondo</h5>
-          <img :src="movie.backdrop" :alt="movie.name" />
-        </div>
-
-        <h5 class="fw-bold">Presupuesto (USD)</h5>
-        <p>{{ movie.budget }}</p>
-
-        <h5 class="fw-bold">Recaudación (USD)</h5>
-        <p>{{ movie.revenue }}</p>
-
-        <h5 class="fw-bold">Duración</h5>
-        <p>{{ movie.runtime }}</p>
-
-        <h5 class="fw-bold">Frase promocional</h5>
-        <p>{{ movie.tagline }}</p>
-
-        <h5 class="fw-bold">Puntuación de TMDB (0–10)</h5>
-        <p>{{ movie.vote_average }}</p>
-
-        <h5 class="fw-bold">Cantidad de votos en TMDB</h5>
-        <p>{{ movie.vote_count }}</p>
-      </div>
-    </div>
-
-    <div class="text-center">
-      <button @click="returning" class="btn btn-dark">Volver</button>
-    </div>
-
-    <hr class="my-5" />
-
-    <div class="row mt-5">
-      <div class="col-md-8 mx-auto">
-        <h3 class="mb-4 fw-bold">
-          Opiniones de la comunidad ({{ reviews.length }})
-        </h3>
-
-        <div v-if="user" class="card shadow-sm mb-5 border-0 bg-light p-4">
-          <h5 class="mb-3">Escribe tu opinión.</h5>
-
-          <div class="mb-3">
-            <label class="form-label d-block text-muted small uppercase"
-              >Calificación</label
-            >
-            <div class="btn-group" role="group">
-              <button
-                v-for="n in 10"
-                :key="n"
-                type="button"
-                class="btn btn-sm"
-                :class="n <= rating ? 'btn-warning' : 'btn-outline-secondary'"
-                @click="rating = n"
-              >
-                ⭐
-              </button>
-            </div>
-          </div>
-
-          <div class="mb-3">
-            <textarea
-              class="form-control border-0"
-              rows="3"
-              placeholder="Escribe tu opinión acerca de esta película."
-              v-model="newReview"
-            ></textarea>
-          </div>
-
-          <button @click="sendReview" class="btn btn-primary px-4 float-end">
-            Enviar reseña
-          </button>
-        </div>
-
-        <div v-else class="alert alert-info text-center py-4 mb-5">
-          <p class="mb-2">
-            Para dejar una reseña, primero debes iniciar sesión.
-          </p>
-          <router-link
-            :to="`/login?redirect=/peliculas/${movie.id}`"
-            class="btn btn-outline-primary btn-sm"
-            >Iniciar sesión</router-link
-          >
-        </div>
-
-        <div class="d-flex gap-2 mb-3">
-          <button
-            class="btn btn-sm"
-            :class="
-              activeFilter === 'newToOld'
-                ? 'btn-primary'
-                : 'btn-outline-secondary'
-            "
-            @click="activeFilter = 'newToOld'"
-          >
-            Mas recientes
-          </button>
-          <button
-            class="btn btn-sm"
-            :class="
-              activeFilter === 'oldToNew'
-                ? 'btn-primary'
-                : 'btn-outline-secondary'
-            "
-            @click="activeFilter = 'oldToNew'"
-          >
-            Mas antiguas
-          </button>
-          <button
-            class="btn btn-sm"
-            :class="
-              activeFilter === 'likes' ? 'btn-primary' : 'btn-outline-secondary'
-            "
-            @click="activeFilter = 'likes'"
-          >
-            Mas likes
-          </button>
-        </div>
-
-        <div
-          v-if="sortedReviews.length > 0"
-          class="list-group list-group-flush shadow-sm rounder border"
-        >
-          <div
-            v-for="review in sortedReviews"
-            :id="review.id"
-            class="list-group-item p-4"
-          >
-            <div class="d-flex justify-content-between align-items-center mb-2">
-              <strong class="text-primary">{{ review.userName }}</strong>
-              <span class="badge bg-warning text-dark"
-                >⭐ {{ review.rating }} / 10</span
-              >
-            </div>
-
-            <p class="mb-1 text-secondary italic">"{{ review.comment }}"</p>
-            <div class="d-flex justify-content-between align-items-center">
-              <small class="text-muted">{{
-                review.date?.toDate().toLocaleDateString()
-              }}</small>
-              <div class="d-flex gap-2">
-                <p>{{ review.likesCount }}</p>
-                <button
-                  v-if="user"
-                  @click="toggleLike(review.id)"
-                  class="btn btn-primary btn-sm"
-                >
-                  {{ hasLike(review.id) ? "Unlike" : "Like" }}
-                </button>
-                <button
-                  v-if="isAdmin"
-                  @click="removeReview(review.id)"
-                  class="btn btn-danger btn-sm"
-                >
-                  Borrar
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div v-else class="text-center py-5">
-          <p class="text-muted">
-            Aún no hay opiniones. ¡Sé el primero en comentar!
-          </p>
-        </div>
-      </div>
-    </div>
+  <div class="d-flex justify-content-center align-items-center" v-else>
+    <H1>ERROR : PELICULA NO ENCONTRADA</H1>
   </div>
-  -->
 </template>
 
 <script setup>
 // VUE Libraries
 import { useRoute, useRouter } from "vue-router";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "@/firebase/firebase";
 import { ref, onMounted, computed, TransitionGroup } from "vue";
 import { useToast } from "vue-toastification";
 import { onUnmounted } from "vue";
@@ -499,6 +237,8 @@ const hasLike = (reviewId) =>
 const newReview = ref("");
 const activeFilter = ref("newToOld");
 const rating = ref(5);
+
+const error404 = ref(false)
 
 const loading = ref(true);
 
@@ -611,31 +351,26 @@ const returning = () => {
  * If the movie has a tmdbId, its trailer will be fetched
  * In case of an error, a toast will be shown to the user
  */
-
 const loadData = async () => {
-  try {
-    loading.value = true;
-    const movies = await getMovies();
-    movie.value = movies.find((p) => p.id === route.params.id);
+  error404.value = false
+  if (useMoviesStore.selectedMovie?.id === route.params.id) {
+    movie.value = useMoviesStore.selectedMovie
+  }
 
-    if (!movie.value) {
-      toast.error("La película no existe.");
-      router.push("/peliculas");
-      return;
-    }
+  const snap = await getDoc(doc(db, "movies", route.params.id));
 
-    actors.value = await getActors();
-    genres.value = await getGenres();
+  if (snap.exists()) {
+    movie.value = {id: snap.id, ...snap.data()}
+  } else {
+    error404.value = true
+    return
+  }
 
-    if (movie.value.tmdbId) {
+  if (movie.value.tmdbId) {
       trailerKey.value = await getTMDBTrailer(movie.value.tmdbId);
     }
-  } catch (error) {
-    toast.error("Error al cargar los datos: " + convertErrors(error));
-  } finally {
-    loading.value = false;
-  }
 };
+
 
 const removeReview = async (id) => {
   if (!confirm("¿Seguro/a de que desea eliminar esta reseña?")) return;

@@ -46,7 +46,7 @@ This is the component for the movie cards displayed in MovieView -->
           {{ genre }}
         </p>
       </div>
-      <router-link :to="`/peliculas/${movie.id}`" class="btn btn-yellow text-white mt-auto">
+      <router-link :to="`/peliculas/${movie.id}`" class="btn btn-yellow text-white mt-auto" @click="goToDetail">
   <font-awesome-icon icon="fa-solid fa-circle-info" />
   Ver detalles
 </router-link>
@@ -71,9 +71,7 @@ const props = defineProps({
   genres: Array,
 });
 
-// Emits (from MovieView)
 
-const emit = defineEmits(["delete"]);
 
 // Composables
 
@@ -82,11 +80,14 @@ const moviesStore = useMoviesStore();
 
 const toast = useToast();
 
+const goToDetail = () => {
+  moviesStore.setMovie(props.movie)
+}
+
 // Computed
 
 // Computed function that checks in the store if the current user is an admin
 
-const isAdmin = computed(() => loginStore.role === "admin");
 
 // Computed function that calculates the movies that are in favorites
 
@@ -100,9 +101,7 @@ const isFavorite = computed(() => {
  * This function will only be available for the edit movies button modal
  */
 
-const sendEdit = () => {
-  moviesStore.setMovie(props.movie);
-};
+
 
 /** Method for the favorites functionality
  * Allows marking and unmarking favorites

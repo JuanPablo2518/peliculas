@@ -385,13 +385,13 @@
                       <img class="icons-photo img-fluid mb-3" :src="genrePlaceholder" alt="">
                       <span class="d-block" >{{ genre.name }}</span>
                     </div>
-                    <span v-if="!movie.genres || movie.genres.length === 0">Sin actores asignados</span>
+                    <span v-if="!movie.genres || movie.genres.length === 0">Sin generos asignados</span>
                   </div>
 
                   <div v-else>
                                       <div class="d-flex overflow-x-auto gap-4 text-center " > 
                     <div class="icon-card p-3" v-for="genre in getMovieGenres(editingMovieForm?.genres)" :key="genre.id">
-                      <img class="icons-photo img-fluid mb-3" :src="'https://placehold.co/600x401'" alt="">
+                      <img class="icons-photo img-fluid mb-3" :src="genrePlaceholder" alt="">
                       <span>{{ genre.name }}</span>
                     </div>
                     
@@ -497,6 +497,7 @@ import genrePlaceholder from "@/assets/img/genrePlaceholder.png"
 import moviePlaceholder  from "@/assets/img/moviePlaceholder.png"
 import actorPlaceholder  from "@/assets/img/actorPlaceholder.png"
 import { getMovieRules } from "@/utils/validations/movieRules";
+import { convertErrors } from "@/utils/errorMessages";
 
 // Components
 
@@ -565,8 +566,12 @@ onUnmounted(() => {
  */
 
 const saveMovie = async (movie) => {
-  createMovie(movie);
+  try {
+  await createMovie(movie);
   toast.success("Se ha ingresado correctamente la pelicula.");
+  } catch (error) {
+    toast.error("El ingreso ha sido invalido: " + convertErrors)
+  }
 };
 
 // Method that activates edit mode

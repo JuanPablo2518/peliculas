@@ -116,8 +116,6 @@
         <MovieCard
           :movie="movie"
           :genres="getGenreNames(movie)"
-          @edit="editMovie"
-          @delete="deleteData"
         ></MovieCard>
       </div>
       <!-- Container displayed when no movies match the filters -->
