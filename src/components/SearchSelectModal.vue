@@ -2,15 +2,15 @@
       <div class="modal-content w-75 mx-auto">
         <div class="modal-header d-block  ">
             <div class="d-flex justify-content-between align-items-center  ">
-                <p class="mb-0">Seleccionar Actor</p>
+                <p class="mb-0">{{ props.type === 'actor' ? 'Seleccionar Actor' : 'Seleccionar Género' }}</p>
                 <div>
-                  <a class="color-yellow me-4 ">+ Agregar Nuevo</a>
-                  <button class="button-close py-2 px-3 rounded-3 text-white">
+                  <router-link :to="`/${  props.type === 'actor' ? 'actores' : 'generos'  }`" class="color-yellow me-4" @click="modalClose">+ Agregar Nuevo</router-link>
+                  <button class="button-close py-2 px-3  rounded-3 text-white">
                     <font-awesome-icon icon="fa-solid fa-x responsive-icon" />
                   </button>
                 </div>
             </div>
-          <input type="text" class="form-control" placeholder="Ingerse ..." v-model="inputSelection">
+          <input type="text" class="form-control mt-3" placeholder="Ingerse ..." v-model="inputSelection">
         </div>
         <div class="modal-body p-0 overflow-y ">
         <div class="header-bar p-3">
@@ -24,7 +24,7 @@
                 <p class="mb-0 subtitle"> {{ value.subtitle }}</p>
             </div>
             </div>
-                <input class="form-check-input selected-checkbox p-3 rounded-circle" type="checkbox" id="checkNativeSwitch" switch :checked="true" /> 
+                <input class="form-check-input selected-checkbox p-3 rounded-circle" type="checkbox" :id="`checkNativeSwitch-selected-${value.id}`" switch :checked="true" /> 
           </div> 
           <div class="header-bar p-3">
             <p class="mb-0">Disponibles</p>
@@ -38,7 +38,7 @@
                 <p class="mb-0 subtitle">  {{ value.subtitle }}</p>
             </div>
             </div>
-                <input class="form-check-input selected-checkbox p-3 rounded-circle" type="checkbox" id="checkNativeSwitch" switch :checked="false" /> 
+                <input class="form-check-input selected-checkbox p-3 rounded-circle" type="checkbox" :id="`checkNativeSwitch-filtered-${value.id}`" switch :checked="false" /> 
           </div> 
           <div class="text-center py-5" v-if="filteredData.length === 0 && selectedValues.length === 0">
             <p>Sin resultados</p>
@@ -57,8 +57,10 @@
 
 <script setup>
 import actorPlaceholder from "@/assets/img/actorPlaceholder.png";
+import router from "@/router";
 import { getActorMovies } from '@/utils/actorsUtils';
 import { getGenresMovies } from '@/utils/genresUtils';
+import { Modal } from "bootstrap";
 import { ref, watch, computed, onMounted } from 'vue';
 const props = defineProps({
   type: String,
@@ -144,6 +146,16 @@ const addValue = (dataId, data)=> {
     
 }
 
+const modalClose = () => {
+  const modalElement = event.currentTarget.closest('.modal')
+
+  const modal = Modal.getInstance(modalElement)
+
+  if(modal) {
+    modal.hide()
+  }
+}
+
 const submitValues = () => {
   const valuesId = selectedValues.value.map(v => v.id)
   emit('save', valuesId)
@@ -208,5 +220,6 @@ const submitValues = () => {
         background-size: 60% 60%; 
     }
 }
+
 
 </style>

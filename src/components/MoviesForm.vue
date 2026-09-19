@@ -315,14 +315,6 @@ It also includes buttons that display the forms for adding actors and genres -->
           <font-awesome-icon icon="fa-solid fa-floppy-disk responsive-icon" />
           Guardar
         </button>
-        <button
-          type="button"
-          v-if="moviesStore.selectedMovie"
-          @click="cancelEdit"
-          class="btn btn-danger"
-        >
-          Cancelar edición
-        </button>
       </div>
     </div>
   </form>
@@ -334,18 +326,10 @@ It also includes buttons that display the forms for adding actors and genres -->
 // VUE Libraries
 import { ref, watch } from "vue";
 import useVuelidate from "@vuelidate/core";
-import {
-  between,
-  minLength,
-  numeric,
-  required,
-  url,
-  integer,
-} from "@vuelidate/validators";
 import { getMovieRules } from "@/utils/validations/movieRules.js";
 import { useToast } from "vue-toastification";
 // Services
-import { searchTMDBMovies, getTMDBDetails } from "@/services/tmdbService";
+import {  getTMDBDetails } from "@/services/tmdbService";
 // Stores
 import { useMoviesStore } from "@/stores/moviesStore";
 // Components
@@ -372,7 +356,6 @@ const toast = useToast();
 
 // Constants
 
-const actualYear = new Date().getFullYear();
 
 // Refs
 
@@ -396,7 +379,6 @@ const inputSelection = ref("");
 const tmdbSearchTerm = ref("");
 const tmdbResults = ref([]);
 
-const type = ref("")
 
 
 // Vuelidate
@@ -577,49 +559,8 @@ const insertMovie = async (id) => {
   selectedGenres.value = idsGenerosMatched;
 };
 
-/**
 
-* Function to auto-fill the entry form with TMDB data
-* If no data is found, it returns null
-* If data is found, it assigns the retrieved values to the form
-* It also uses the forEach method to find all movie genres that exist in the database and assigns them to the form
-  */
 
-const selectTMDBMovie = async (id) => {
-  const p = await getTMDBDetails(id);
-
-  if (!p || !p.genres) {
-    toast.error("No se pudieron cargar los detalles de esta película.");
-    return;
-  }
-  name.value = p.title;
-  synopsis.value = p.overview;
-  year.value = p.release_date ? parseInt(p.release_date.slice(0, 4)) : null;
-  poster.value = p.poster_path
-    ? `https://image.tmdb.org/t/p/w500${p.poster_path}`
-    : "";
-  backdrop.value = p.backdrop_path
-    ? `https://image.tmdb.org/t/p/w1280${p.backdrop_path}`
-    : "";
-  vote_average.value = p.vote_average;
-  vote_count.value = p.vote_count;
-  runtime.value = p.runtime;
-  tagline.value = p.tagline;
-  budget.value = p.budget;
-  revenue.value = p.revenue;
-  tmdbId.value = id;
-
-  const idsGenerosMatched = [];
-  p.genres.forEach((gTMDB) => {
-    const geneMatch = props.genres.find(
-      (gLoc) => gLoc.name.toLowerCase() === gTMDB.name.toLowerCase(),
-    );
-    if (geneMatch) idsGenerosMatched.push(geneMatch.id);
-  });
-  selectedGenres.value = idsGenerosMatched;
-  tmdbResults.value = [];
-  tmdbSearchTerm.value = "";
-};
 </script>
 
 <style scoped lang="scss">

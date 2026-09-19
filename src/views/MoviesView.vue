@@ -181,10 +181,10 @@ const filterMovies = computed(() => {
       .includes(searchQuery.value.toLowerCase());
     const matchesGenre =
       !selectedGenre.value ||
-      selectedGenre.value.every((g) => movie.genres.includes(g));
+      selectedGenre.value.every((g) => movie.genres?.includes(g));
     const matchesActor =
       !selectedActor.value ||
-      selectedActor.value.every((a) => movie.actors.includes(a));
+      selectedActor.value.every((a) => movie.actors?.includes(a));
     const matchesFavorite =
       !showingFavorites.value || moviesStore.favoritesId.includes(movie.id);
 
@@ -222,7 +222,6 @@ onUnmounted(() => {
 
 const toggleFavorites = async () => {
   showingFavorites.value = !showingFavorites.value;
-  console.log(filterMovies.value);
 };
 
 /**

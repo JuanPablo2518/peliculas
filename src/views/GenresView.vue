@@ -202,6 +202,9 @@ const editGenre = (genre) => {
  */
 
 const removeGenre = async (id) => {
+  const confirmed = confirm("¿Estas seguro de que quieres eliminar este genero?")
+  if (!confirmed) return
+
   await deleteGenre(id, toDeleteMovies.value);
   toast.success("Género eliminado correctamente.");
 };

@@ -6,7 +6,7 @@
       <!-- Title -->
       <h2 class="text-center mb-5">Formulario de registro</h2>
       <!-- Form -->
-      <form @submit.prevent="singUp">
+      <form @submit.prevent="signUp">
         <!-- Name Field -->
         <div class="mb-3">
           <label class="form-label">Nombre</label>
@@ -127,12 +127,13 @@ const isUniqueEmail = async (value) => {
  * In case of an error, it notifies the user with a toast
  */
 
-const singUp = async () => {
-  loading.value = true;
+const signUp = async () => {
   try {
     const result = await v$.value.$validate();
 
     if (!result) return;
+
+    loading.value = true;
 
     const user = await register(email.value, password.value, name.value);
 

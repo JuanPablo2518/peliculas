@@ -64,11 +64,11 @@
             <div class="d-flex gap-5 justify-content-between  ">
                       <div class="info-card">
               <h5 class="info-card-title">Presupuesto</h5>
-              <h3><strong>${{ (movie?.budget / 1000000).toFixed(1) }} M</strong></h3>
+              <h3><strong>{{ movie?.budget ? "$" + (movie.budget / 1000000).toFixed(1) + " M" : "No Definido" }} </strong></h3>
             </div>
             <div class="text-end info-card">
               <h5 class="info-card-title">Recaudacion</h5>
-              <h3><strong>${{ (movie?.revenue / 1000000).toFixed(1) }} M</strong></h3>
+              <h3><strong>{{ movie?.budget ? "$" + (movie.revenue / 1000000).toFixed(1) + " M" : "No Definido"}} </strong></h3>
             </div>
             </div>
           </div>
@@ -326,9 +326,9 @@ onMounted(async () => {
   }
 
   filteredActors.value =
-    actors.value.filter((actor) => movie.value.actors.includes(actor.id)) || [];
+    actors.value.filter((actor) => movie.value.actors?.includes(actor.id)) || [];
   filteredGenres.value =
-    genres.value.filter((genre) => movie.value.genres.includes(genre.id)) || [];
+    genres.value.filter((genre) => movie.value.genres?.includes(genre.id)) || [];
 });
 
 // Method to unsubscribe when the component is unmounted

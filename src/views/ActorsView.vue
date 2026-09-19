@@ -571,7 +571,7 @@ const editActor = async (actor) => {
  */
 
 const removeActor = async (id) => {
-    const confirmed = confirm("¿Estas seguro de que quieres eliminar esta pelicula?")
+    const confirmed = confirm("¿Estas seguro de que quieres eliminar este actor?")
   if (!confirmed) return
 
   await deleteActor(id, toDeleteMovies.value);

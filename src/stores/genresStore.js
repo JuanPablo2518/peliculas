@@ -1,24 +1,21 @@
 import { getTMDBGenres } from "@/services/tmdbService";
 import { defineStore } from "pinia";
-import { ref } from "vue";
 
-export const useGenresStore = defineStore("genres", () => {
-  const genres = ref([]);
-  const loaded = ref(false);
+export const useGenresStore = defineStore("genres", {
+  state: () => ({
+    genres: [],
+    loaded: false,
+  }),
+  actions: {
+    async getGenres() {
+      if (this.loaded) return this.genres;
 
-  const getGenres = async () => {
-    if (loaded.value) return genres.value;
+      const response = await getTMDBGenres();
 
-    const response = await getTMDBGenres();
+      this.genres = response.genres;
+      this.loaded = true;
 
-    genres.value = response.genres;
-    loaded.value = true;
-
-    return genres.value;
-  };
-
-  return {
-    genres,
-    getGenres,
-  };
+      return this.genres;
+    },
+  },
 });
