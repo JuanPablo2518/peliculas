@@ -446,15 +446,6 @@ const resetForm = () => {
   v$.value.$reset();
 };
 
-/**
- * Function to cancel the editing of a movie
- * Clears the form values and assigns null to the movie being edited in the store
- */
-
-const cancelEdit = () => {
-  resetForm();
-  moviesStore.setMovie(null);
-};
 
 /**
  * Function to submit the form values to the database

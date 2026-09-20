@@ -3,7 +3,7 @@
 <template>
   <div v-if="!loading" class="container my-4 my-md-5 pt-3 pt-md-5">
     <div class="row justify-content-center mx-0">
-      <!-- Login Card (12 cols en móvil, 8 en tablet, 6 en escritorio medio, 4 en pantallas muy grandes) -->
+      <!-- Login Card  -->
       <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4 border rounded p-4 p-sm-5 shadow">
         <!-- Title -->
         <h2 class="text-center mb-4 mb-md-5">Iniciar sesión</h2>

@@ -103,17 +103,13 @@
 
 <script setup>
 // VUE Libraries
-import { ref, onMounted, watch, computed, onUnmounted } from "vue";
+import { ref, onMounted,  computed, onUnmounted } from "vue";
 import { useToast } from "vue-toastification";
 // Components
 import MovieCard from "@/components/MovieCard.vue";
 // Services
 import {
-  getMovies,
-  createMovie,
-  updateMovie,
-  deleteMovie,
-  subscribeMovies,
+  subscribeMovies
 } from "@/services/movieService";
 import { getActors } from "@/services/actorService";
 import { getGenres } from "@/services/genreService";

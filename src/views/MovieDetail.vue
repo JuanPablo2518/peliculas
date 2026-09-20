@@ -229,7 +229,7 @@ const rating = ref(5);
 
 const error404 = ref(false)
 
-const loading = ref(true);
+
 
 const reviews = ref([]);
 const actors = ref([]);
