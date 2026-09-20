@@ -1,95 +1,130 @@
 # Filmados!
 
-Aplicacion para conocer mas de peliculas
+Aplicación para conocer más sobre películas: explora un catálogo, revisa detalles, deja comentarios y marca tus favoritas.
 
-![enter image description here](https://imgur.com/VdS6TJH.jpg)
+![Vista principal de Filmados](https://imgur.com/VdS6TJH.jpg)
 
-# FUNCIONALIDADES
+🔗 [Demo en vivo](#) · 📁 [Repositorio](https://github.com/JuanPablo2518/peliculas)
 
-## CRUD de Peliculas, Actores y Generos
+## Funcionalidades
 
-La aplicacion cuenta con un menu para administradores donde pueden ingresar peliculas, modificar y eliminar peliculas, tambien cuentan con la opcion de autocompletar el formulario de ingreso de peliculas con informacion sacada directamente de la API de TMDB
+### CRUD de Películas, Actores y Géneros
 
-Al escribir en el formulario, se desplegaran peliculas encontradas desde la API de TMDN, usando debounce para evitar exceso de llamadas a la AP
-![I](https://imgur.com/LJRT2Tw.jpg)
+La aplicación cuenta con un menú para administradores donde pueden ingresar, modificar y eliminar películas. También cuentan con la opción de autocompletar el formulario de ingreso con información obtenida directamente desde la API de TMDB.
 
-Se hace uso de Vuelidate para garantizar que el texto ingresado cumpla el formato requerido para la base de datos
+Al escribir en el formulario se despliegan las películas encontradas en la API de TMDB, usando _debounce_ para evitar el exceso de llamadas mientras el usuario escribe.
 
-![enter image description here](https://imgur.com/M4vr5Pw.jpg)
+![Autocompletado de películas desde la API de TMDB](https://imgur.com/LJRT2Tw.jpg)
 
-## Vista De Peliculas a nivel Usuario
+Se hace uso de Vuelidate para garantizar que el texto ingresado cumpla el formato requerido por la base de datos.
 
-Los usuarios podran revisar todas las peliculas que estan subidas a la base de datos, la pagina principal cuenta con cards de todas las peliculas con una vista previa de la portada, cantidad de actores, y los 3 primeros generos
+![Validación de formularios con Vuelidate](https://imgur.com/M4vr5Pw.jpg)
 
-![enter image description here](https://imgur.com/5eXUGNe.jpg)
+### Vista de películas a nivel usuario
 
-Este buscador inicial cuenta con opciones para filtrar busquedas por actores, generos y nombre, ademas de una opcion para filtrar por favoritos del propio usuario, solos los usuarios con una cuenta pueden marcar favoritos
+Los usuarios pueden revisar todas las películas subidas a la base de datos. La página principal cuenta con tarjetas (cards) de cada película, con una vista previa de la portada, cantidad de actores y los primeros 3 géneros.
 
-![enter image description here](https://imgur.com/lfPvB0z.jpg)
+![Catálogo de películas en tarjetas](https://imgur.com/5eXUGNe.jpg)
 
-## Seccion de detalles
+El buscador inicial permite filtrar por actores, géneros y nombre, además de una opción para filtrar por favoritos del propio usuario. Solo los usuarios con cuenta pueden marcar favoritos.
 
-Dentro de la seccion de detalles de la pelicula a la cual cualquier usuario podra acceder, se encontrara gran informacion de la pelicula, como una portada, sinopsis, actores, etc,
-ademas de eso tambien contara con el trailer de la pelicula y una seccion de comentarios, todos los usuarios podran ver esta seccion pero solo usuarios Logeados podran escribir comentarios y dar likes.
+![Filtros de búsqueda por actor, género y favoritos](https://imgur.com/lfPvB0z.jpg)
 
-![enter image description here](https://imgur.com/VdS6TJH.jpg)
-![enter image description here](https://imgur.com/h5PduWc.jpg)
+### Sección de detalles
 
-## Login y Registro
+Cualquier usuario puede acceder a la sección de detalles de una película, donde encontrará información completa: portada, sinopsis, actores, tráiler y una sección de comentarios. Todos los usuarios pueden ver los comentarios, pero solo los usuarios con sesión iniciada pueden escribir comentarios y dar likes.
 
-Los usuarios cuentan con la posibilidad de crear cuentas y logearse en esas cuentas, este sistemas de cuentas esta gestionado por Firebase Auth
+![Página de detalle de una película](https://imgur.com/VdS6TJH.jpg)
+![Sección de comentarios y likes](https://imgur.com/h5PduWc.jpg)
 
-![enter image description here](https://imgur.com/E3opw8w.jpg)
+### Login y registro
 
-# TECNOLOGIAS
+Los usuarios pueden crear cuentas e iniciar sesión. Este sistema está gestionado por Firebase Auth.
 
-## Framework
+![Pantalla de login y registro](https://imgur.com/E3opw8w.jpg)
 
-![enter image description here](https://imgur.com/AryiWBp.jpg) Vue: Framework principal usado en el proyecto, se hacen uso de librerias como:
+## Tecnologías
 
-- Router: enrutamiento de la aplicacion
-- Pinia: Stores de la aplicacion
-- toastification: generador de alertas flotantes
-- Vuelidate: crea reglas para la validacion de texto en los inputs
+### Framework
 
-![enter image description here](https://imgur.com/U2YJ593.jpg)Vite: Herramienta para el montaje de un servidor de desarrollo
+![Logo de Vue](https://imgur.com/AryiWBp.jpg)
 
-## Backend
+**Vue**: framework principal usado en el proyecto, junto con librerías como:
 
-![enter image description here](https://imgur.com/rkw2uEW.jpg)Firebase: Base de datos no relacional usada para el proyecto, encargada del almacenamiento de peliculas, actores, generos, usuarios, reseñas, likes en este se usan elementos como:
+- **Router**: enrutamiento de la aplicación
+- **Pinia**: manejo de stores de la aplicación
+- **Vue Toastification**: generador de alertas flotantes
+- **Vuelidate**: reglas de validación para los inputs
 
-- Firebase Auth: encargado de la autentificacion de los login y registros de cuentas
-- Firebase Hosting / Github Action: Integracion para el despliegue automatico del proyecto
+![Logo de Vite](https://imgur.com/U2YJ593.jpg)
 
-# Api Externa
+**Vite**: herramienta usada para el servidor de desarrollo y el build de producción.
 
-![enter image description here](https://imgur.com/ffhfU61.jpg) TMDB: Api encargada de suministrar informacion de peliculas y actores para el autocompletado de informacion en formularios de ingreso.
+### Backend
 
-# Diseño
+![Logo de Firebase](https://imgur.com/rkw2uEW.jpg)
 
-![enter image description here](https://imgur.com/9VmqUuB.jpg)Bootstrap: Framework de css usado para estilos generales y de estructuracion de elementos.
-![enter image description here](https://imgur.com/Dmq2vfI.jpg)Sass: Preprocesador de css usado para la estilizacion de elementos de forma mas concreta y ordenada (todo lo que no sea posible de estilizar con Bootstrap)
+**Firebase**: base de datos no relacional usada en el proyecto, encargada del almacenamiento de películas, actores, géneros, usuarios, reseñas y likes. Se hace uso de:
 
-# Instalación
+- **Firebase Auth**: autenticación de login y registro de cuentas
+- **Firebase Hosting + GitHub Actions**: integración para el despliegue automático del proyecto
+
+### API externa
+
+![Logo de TMDB](https://imgur.com/ffhfU61.jpg)
+
+**TMDB**: API encargada de suministrar información de películas y actores para el autocompletado en los formularios de ingreso.
+
+### Diseño
+
+![Logo de Bootstrap](https://imgur.com/9VmqUuB.jpg)
+
+**Bootstrap**: framework de CSS usado para estilos generales y estructuración de elementos.
+
+![Logo de Sass](https://imgur.com/Dmq2vfI.jpg)
+
+**Sass**: preprocesador de CSS usado para estilizar elementos de forma más concreta y ordenada, en todo lo que no cubre Bootstrap.
+
+## Instalación
 
 1. Clona el repositorio
-   git clone https://github.com/JuanPablo2518/peliculas
+
+   ```bash
+   git clone https://github.com/JuanPablo2518/peliculas.git
    cd peliculas
+   ```
 
 2. Instala las dependencias
 
-npm install
+   ```bash
+   npm install
+   ```
 
-3. Corre el proyecto en modo desarrollo
+3. Configura las variables de entorno
 
-npm run dev
+   ```bash
+   cp .env.example .env
+   ```
 
-El proyecto estará disponible en `http://localhost:5173`
+   Completa el archivo `.env` con tus propias claves (API key de TMDB y configuración de Firebase):
 
-# Desafios
+   ```
+   VITE_TMDB_API_KEY=tu_api_key_aqui
+   VITE_FIREBASE_API_KEY=tu_api_key_aqui
+   VITE_FIREBASE_AUTH_DOMAIN=tu_dominio_aqui
+   VITE_FIREBASE_PROJECT_ID=tu_project_id_aqui
+   ```
 
-Este es un proyecto que trabaje durante un bootcamp front end, con la guia de mi profesor, luego de terminar el bootcamp segui trabajandolo para tener una version mas completa y mejorar mis habilidades como programador, lo cual puedo decir que estoy satisfecho ya que aprendi y hice uso de nuevas cosas como el aprendizaje de bases de datos no relacionales, cruds, conexion a APIs, sistemas de autentificacion y usuarios.
+4. Corre el proyecto en modo desarrollo
+   ```bash
+   npm run dev
+   ```
+   El proyecto estará disponible en `http://localhost:5173`
 
-# Autor
+## Desafíos
 
-Juan Pablo Ramirez — [LinkedIn](www.linkedin.com/in/juan-pablo-ramirez-olivares-a19368313) · [Portafolio](https://github.com/JuanPablo2518/Portafolio)
+Este proyecto lo trabajé durante un bootcamp de front end, con la guía de mi profesor. Luego de terminar el bootcamp seguí desarrollándolo por mi cuenta para tener una versión más completa y mejorar mis habilidades como programador. Estoy satisfecho con el resultado, ya que aprendí y apliqué cosas nuevas como el uso de bases de datos no relacionales, CRUDs, conexión a APIs externas y sistemas de autenticación de usuarios.
+
+## Autor
+
+Juan Pablo Ramírez — [LinkedIn](https://www.linkedin.com/in/juan-pablo-ramirez-olivares-a19368313) · [Portafolio](https://github.com/JuanPablo2518/Portafolio)
