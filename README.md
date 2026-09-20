@@ -109,10 +109,15 @@ Los usuarios pueden crear cuentas e iniciar sesión. Este sistema está gestiona
    Completa el archivo `.env` con tus propias claves (API key de TMDB y configuración de Firebase):
 
    ```
-   VITE_TMDB_API_KEY=tu_api_key_aqui
-   VITE_FIREBASE_API_KEY=tu_api_key_aqui
-   VITE_FIREBASE_AUTH_DOMAIN=tu_dominio_aqui
-   VITE_FIREBASE_PROJECT_ID=tu_project_id_aqui
+    VITE_FIREBASE_API_KEY=
+    VITE_FIREBASE_AUTH_DOMAIN=
+    VITE_FIREBASE_PROJECT_ID=
+    VITE_FIREBASE_STORAGE_BUCKET=
+    VITE_FIREBASE_MESSAGING_SENDER_ID=
+    VITE_FIREBASE_APP_ID=
+
+
+    VITE_TMDB_API_KEY=
    ```
 
 4. Corre el proyecto en modo desarrollo
