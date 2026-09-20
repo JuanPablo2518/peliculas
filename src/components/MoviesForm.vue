@@ -306,12 +306,12 @@ It also includes buttons that display the forms for adding actors and genres -->
         </div>
 
 
-      <div class="d-flex justify-content-end mt-3">
-          <button type="button" class="btn btn-danger align-items-center mt-4 px-4 py-2 me-4" @click="resetForm">
+      <div class="d-flex flex-column flex-md-row justify-content-end mt-3">
+          <button type="button" class="col-12 col-md-2 btn btn-danger align-items-center mt-4 px-4 py-2 me-4" @click="resetForm">
           <font-awesome-icon icon="fa-solid fa-broom responsive-icon" />
           Limpiar
         </button>
-        <button class="btn btn-yellow align-items-center mt-4 px-4 py-2" :disabled="v$.$invalid && v$.$dirty">
+        <button class="col-12 col-md-2 btn btn-yellow align-items-center mt-4 px-4 py-2" :disabled="v$.$invalid && v$.$dirty">
           <font-awesome-icon icon="fa-solid fa-floppy-disk responsive-icon" />
           Guardar
         </button>
@@ -376,8 +376,7 @@ const revenue = ref(0);
 const tmdbId = ref(null);
 
 const inputSelection = ref("");
-const tmdbSearchTerm = ref("");
-const tmdbResults = ref([]);
+
 
 
 

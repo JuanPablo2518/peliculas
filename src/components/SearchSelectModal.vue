@@ -1,15 +1,16 @@
 <template>
       <div class="modal-content w-75 mx-auto">
         <div class="modal-header d-block  ">
-            <div class="d-flex justify-content-between align-items-center  ">
-                <p class="mb-0">{{ props.type === 'actor' ? 'Seleccionar Actor' : 'Seleccionar Género' }}</p>
-                <div>
-                  <router-link :to="`/${  props.type === 'actor' ? 'actores' : 'generos'  }`" class="color-yellow me-4" @click="modalClose">+ Agregar Nuevo</router-link>
-                  <button class="button-close py-2 px-3  rounded-3 text-white">
-                    <font-awesome-icon icon="fa-solid fa-x responsive-icon" />
-                  </button>
-                </div>
-            </div>
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+    <p class="mb-0 col-12 col-md-auto">{{ props.type === 'actor' ? 'Seleccionar Actor' : 'Seleccionar Género' }}</p>
+    <div class="d-flex align-items-center justify-content-between w-100 w-md-auto">
+        <router-link :to="`/${ props.type === 'actor' ? 'actores' : 'generos' }`" class="color-yellow me-md-4" @click="modalClose">+ Agregar Nuevo</router-link>
+        <button class="button-close py-2 px-3 rounded-3 text-white" data-bs-dismiss="modal">
+            <font-awesome-icon icon="fa-solid fa-x responsive-icon" />
+        </button>
+    </div>
+</div>
+
           <input type="text" class="form-control mt-3" placeholder="Ingerse ..." v-model="inputSelection">
         </div>
         <div class="modal-body p-0 overflow-y ">
@@ -57,11 +58,10 @@
 
 <script setup>
 import actorPlaceholder from "@/assets/img/actorPlaceholder.png";
-import router from "@/router";
 import { getActorMovies } from '@/utils/actorsUtils';
 import { getGenresMovies } from '@/utils/genresUtils';
 import { Modal } from "bootstrap";
-import { ref, watch, computed, onMounted } from 'vue';
+import { ref, watch, computed } from 'vue';
 const props = defineProps({
   type: String,
   data: Array,
@@ -146,15 +146,15 @@ const addValue = (dataId, data)=> {
     
 }
 
-const modalClose = () => {
-  const modalElement = event.currentTarget.closest('.modal')
-
-  const modal = Modal.getInstance(modalElement)
-
-  if(modal) {
-    modal.hide()
+const modalClose = (event) => {
+  const modalElement = event?.currentTarget?.closest('.modal');
+  if (modalElement) {
+    const modal = Modal.getInstance(modalElement);
+    if (modal) {
+      modal.hide();
+    }
   }
-}
+};
 
 const submitValues = () => {
   const valuesId = selectedValues.value.map(v => v.id)

@@ -231,8 +231,7 @@ import useVuelidate from "@vuelidate/core";
 import { getActorRules } from "@/utils/validations/actorRules";
 import { useToast } from "vue-toastification";
 // Services
-import { getActors } from "@/services/actorService";
-import { searchTMDBActors, getTMDBActorsDetails } from "@/services/tmdbService";
+import { getTMDBActorsDetails } from "@/services/tmdbService";
 import TMDBInput from "./TMDBInput.vue";
 
 // COMPOSABLES
@@ -258,8 +257,6 @@ const tmdbPopularity = ref(0);
 const tmdbId = ref(null);
 const photo = ref("");
 
-const tmdbSearchTerm = ref("");
-const tmdbResults = ref([]);
 const resetTMDBPopularity = ref(false);
 const tmdbOriginalName = ref(null);
 
@@ -281,29 +278,9 @@ const state = reactive({
 });
 const v$ = useVuelidate(rules, state, {$scope: 'create-actor'});
 
-// METHODS
-
-
-/**
- * Method used to submit the form data
- * Checks whether the value exists and meets the Vuelidate requirements
- * If valid: uses the save emit defined in actorsView, and resets the form
- * If not valid, returns null
- */
 const submitForm = async () => {
   const result = await v$.value.$validate();
   if (!result) return;
-
-  const actors = await getActors();
-
-  if (
-    actors.find(
-      (a) => a.name.trim().toLowerCase() === name.value.trim().toLowerCase(),
-    )
-  ) {
-    toast.warning("El actor ingresado ya existe.");
-    return;
-  }
 
   emit("save", {
     name: name.value,
@@ -319,14 +296,6 @@ const submitForm = async () => {
 
   resetForm();
   v$.value.$reset();
-};
-
-const searchInTMDB = async () => {
-  if (tmdbSearchTerm.value.length < 3) {
-    tmdbResults.value = [];
-    return;
-  }
-  tmdbResults.value = await searchTMDBActors(tmdbSearchTerm.value);
 };
 
 const insertActor = async (id) => {

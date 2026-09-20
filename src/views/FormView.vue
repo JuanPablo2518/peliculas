@@ -570,7 +570,7 @@ const saveMovie = async (movie) => {
   await createMovie(movie);
   toast.success("Se ha ingresado correctamente la pelicula.");
   } catch (error) {
-    toast.error("El ingreso ha sido invalido: " + convertErrors)
+    toast.error("El ingreso ha sido invalido: " + convertErrors(error))
   }
 };
 

@@ -412,7 +412,7 @@
 
 <script setup>
 // VUE Libraries
-import { ref, onMounted, onUnmounted, computed, watch, reactive } from "vue";
+import { ref, onMounted, onUnmounted, computed, watch } from "vue";
 import { useToast } from "vue-toastification";
 // Services
 import {
@@ -424,7 +424,6 @@ import {
 import { subscribeMovies } from "@/services/movieService";
 // Components
 import ActorForm from "@/components/ActorForm.vue";
-import { getMovieRules } from "@/utils/validations/movieRules";
 import { getActorRules } from "@/utils/validations/actorRules";
 import useVuelidate from "@vuelidate/core";
 import { convertErrors } from "@/utils/errorMessages";

@@ -2,163 +2,154 @@
 
 <template>
   <div v-if="!error404" >
-            <div class="movie-backdrop d-flex gap-5   align-items-end " :style="{backgroundImage: movie?.backdrop ? `url(${movie.backdrop})` : ''}">
-          <div class="ms-5 ">
-            <img :src="movie?.poster" :alt="movie?.name" class=" movie-poster" />
+            <div class="movie-backdrop d-flex flex-column flex-md-row gap-4 gap-md-5 align-items-center align-items-md-end p-3 p-sm-4 p-md-5" :style="{backgroundImage: movie?.backdrop ? `url(${movie.backdrop})` : ''}">
+          <div class="ms-0 ms-md-5 text-center text-md-start">
+            <img :src="movie?.poster" :alt="movie?.name" class="movie-poster" />
           </div>
 
-          <div>
-                <p class="ficha-text"><strong>Ficha de Pelicula</strong></p>
+          <div class="w-100 text-center text-md-start">
+            <p class="ficha-text"><strong>Ficha de Película</strong></p>
 
-        <h1 class="mb-3">{{ movie?.name }}</h1>
-        <h4 class="mb-2">{{ movie?.tagline }}</h4>
+            <h1 class="mb-3">{{ movie?.name }}</h1>
+            <h4 class="mb-2">{{ movie?.tagline }}</h4>
 
-        <div class="d-flex gap-3 mb-3">
-          <p><strong>{{ movie?.year }}</strong></p> 
-          <p>•</p>
-          <p>{{ convertMinutes(movie?.runtime)[0]}} h {{ convertMinutes(movie?.runtime)[1]}} m</p>
-            <p class="d-flex"  v-for="genre in filteredGenres" :key="genre.id">
-              <p class="me-3">• </p>
-              <p> {{ genre.name }}</p>  
-            </p>
+            <div class="d-flex flex-wrap gap-2 gap-md-3 mb-3 justify-content-center justify-content-md-start align-items-center">
+              <p class="mb-0"><strong>{{ movie?.year }}</strong></p> 
+              <p class="mb-0">•</p>
+              <p class="mb-0">{{ convertMinutes(movie?.runtime)[0]}} h {{ convertMinutes(movie?.runtime)[1]}} m</p>
+              <div class="d-flex flex-wrap gap-2 align-items-center" v-for="genre in filteredGenres" :key="genre.id">
+                <p class="mb-0">•</p>
+                <p class="mb-0">{{ genre.name }}</p>  
+              </div>
+            </div>
 
-        </div>
+            <div class="d-flex flex-wrap gap-2 gap-md-3 justify-content-center justify-content-md-start">
+              <button class="btn btn-yellow d-flex gap-2 align-items-center" @click="scrollToTrailer">
+                <font-awesome-icon icon="fa-solid fa-play responsive-icon" />
+                <p class="mb-0">Ver Trailer</p>
+              </button>
+              <button class="btn btn-outline-yellow d-flex gap-2 align-items-center">
+                <svg width="20" height="20" class="tmdb-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M25.99 29.198c2.807 0 4.708-1.896 4.708-4.708v-19.781c0-2.807-1.901-4.708-4.708-4.708h-19.979c-2.807 0-4.708 1.901-4.708 4.708v27.292l2.411-2.802v-24.49c0.005-1.266 1.031-2.292 2.297-2.292h19.974c1.266 0 2.292 1.026 2.292 2.292v19.781c0 1.266-1.026 2.292-2.292 2.292h-16.755l-2.417 2.417-0.016-0.016zM11.714 15.286h-2.26v7.599h2.26c5.057 0 5.057-7.599 0-7.599zM11.714 21.365h-0.734v-4.557h0.734c2.958 0 2.958 4.557 0 4.557zM11.276 13.854h1.516v-6.083h1.891v-1.505h-5.302v1.505h1.896zM18.75 9.599l-2.625-3.333h-0.49v7.714h1.542v-4.24l1.573 2.042 1.578-2.042-0.010 4.24h1.542v-7.714h-0.479zM21.313 19.089c0.474-0.333 0.677-0.922 0.698-1.5 0.031-1.339-0.807-2.307-2.156-2.307h-3.005v7.609h3.005c1.24-0.010 2.245-1.021 2.245-2.26v-0.036c0-0.62-0.307-1.172-0.781-1.5zM18.37 16.802h1.354c0.432 0 0.698 0.339 0.698 0.766 0.031 0.406-0.286 0.76-0.698 0.76h-1.354zM19.724 21.37h-1.354v-1.516h1.37c0.411 0 0.745 0.333 0.745 0.745v0.016c0 0.417-0.333 0.755-0.75 0.755z"/>
+                </svg>
+                <p class="mb-0">{{ movie?.vote_average?.toFixed(1) }} / {{ movie?.vote_count }} votos</p>
+              </button>
 
-        <div class="d-flex gap-3">
-                    <button class="btn btn-yellow d-flex gap-2 align-items-center">
-            <font-awesome-icon icon="fa-solid fa-play responsive-icon" />
-            <p @click="scrollToTrailer" class="mb-0">Ver Trailer</p>
-          </button>
-    <button class="btn btn-outline-yellow d-flex gap-2 align-items-center">
-      <svg width="20" height="20" class="tmdb-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-        <path d="M25.99 29.198c2.807 0 4.708-1.896 4.708-4.708v-19.781c0-2.807-1.901-4.708-4.708-4.708h-19.979c-2.807 0-4.708 1.901-4.708 4.708v27.292l2.411-2.802v-24.49c0.005-1.266 1.031-2.292 2.297-2.292h19.974c1.266 0 2.292 1.026 2.292 2.292v19.781c0 1.266-1.026 2.292-2.292 2.292h-16.755l-2.417 2.417-0.016-0.016zM11.714 15.286h-2.26v7.599h2.26c5.057 0 5.057-7.599 0-7.599zM11.714 21.365h-0.734v-4.557h0.734c2.958 0 2.958 4.557 0 4.557zM11.276 13.854h1.516v-6.083h1.891v-1.505h-5.302v1.505h1.896zM18.75 9.599l-2.625-3.333h-0.49v7.714h1.542v-4.24l1.573 2.042 1.578-2.042-0.010 4.24h1.542v-7.714h-0.479zM21.313 19.089c0.474-0.333 0.677-0.922 0.698-1.5 0.031-1.339-0.807-2.307-2.156-2.307h-3.005v7.609h3.005c1.24-0.010 2.245-1.021 2.245-2.26v-0.036c0-0.62-0.307-1.172-0.781-1.5zM18.37 16.802h1.354c0.432 0 0.698 0.339 0.698 0.766 0.031 0.406-0.286 0.76-0.698 0.76h-1.354zM19.724 21.37h-1.354v-1.516h1.37c0.411 0 0.745 0.333 0.745 0.745v0.016c0 0.417-0.333 0.755-0.75 0.755z"/>
-      </svg>
-      <p class="mb-0">{{ movie?.vote_average?.toFixed(1) }} / {{ movie?.vote_count }} votos</p>
-    </button>
-
-          <button class="btn btn-outline-yellow d-flex align-items-center gap-2">
-            <font-awesome-icon icon="fa-solid fa-heart responsive-icon" />
-            <p class="mb-0">{{ movie?.favsCount || 0 }} Favoritos</p>
-          </button>
-        </div>
+              <button class="btn btn-outline-yellow d-flex align-items-center gap-2">
+                <font-awesome-icon icon="fa-solid fa-heart responsive-icon" />
+                <p class="mb-0">{{ movie?.favsCount || 0 }} Favoritos</p>
+              </button>
+            </div>
           </div>
         </div>
 
-        <div class="sinopsis-section mt-5 d-flex py-5 justify-content-between align-items-start">
-          <div class="w-50">
-            <h2 class="mb-4"><strong>Sinopsis</strong></h2>
+        <div class="sinopsis-section mt-4 mt-md-5 d-flex flex-column flex-lg-row py-4 py-md-5 justify-content-between align-items-start gap-4">
+          <div class="w-100 w-lg-50">
+            <h2 class="mb-3 mb-md-4"><strong>Sinopsis</strong></h2>
             <p>{{ movie?.synopsis }}</p>
           </div>
 
-          <div class="">
-            <div class="d-flex gap-5 justify-content-between mb-4">
-            <div class="info-card">
-              <h5 class="info-card-title">Estreno</h5>
-              <h3><strong>{{ movie?.year }}</strong></h3>
+          <div class="w-100 w-lg-auto">
+            <div class="d-flex gap-3 gap-sm-5 justify-content-between mb-3 mb-md-4">
+              <div class="info-card flex-fill">
+                <h5 class="info-card-title">Estreno</h5>
+                <h3><strong>{{ movie?.year }}</strong></h3>
+              </div>
+              <div class="info-card text-end flex-fill">
+                <h5 class="info-card-title">Duración</h5>
+                <h3><strong>{{ convertMinutes(movie?.runtime)[0]}} h {{ convertMinutes(movie?.runtime)[1]}} m</strong></h3>
+              </div>
             </div>
-            <div class="info-card text-end">
-              <h5 class="info-card-title ">Duracion</h5>
-              <h3><strong>{{ convertMinutes(movie?.runtime)[0]}} h {{ convertMinutes(movie?.runtime)[1]}} m</strong></h3>
-            </div>
-            </div>
-            <div class="d-flex gap-5 justify-content-between  ">
-                      <div class="info-card">
-              <h5 class="info-card-title">Presupuesto</h5>
-              <h3><strong>{{ movie?.budget ? "$" + (movie.budget / 1000000).toFixed(1) + " M" : "No Definido" }} </strong></h3>
-            </div>
-            <div class="text-end info-card">
-              <h5 class="info-card-title">Recaudacion</h5>
-              <h3><strong>{{ movie?.budget ? "$" + (movie.revenue / 1000000).toFixed(1) + " M" : "No Definido"}} </strong></h3>
-            </div>
+            <div class="d-flex gap-3 gap-sm-5 justify-content-between">
+              <div class="info-card flex-fill">
+                <h5 class="info-card-title">Presupuesto</h5>
+                <h3><strong>{{ movie?.budget ? "$" + (movie.budget / 1000000).toFixed(1) + " M" : "No Definido" }} </strong></h3>
+              </div>
+              <div class="info-card text-end flex-fill">
+                <h5 class="info-card-title">Recaudación</h5>
+                <h3><strong>{{ movie?.revenue ? "$" + (movie.revenue / 1000000).toFixed(1) + " M" : "No Definido"}} </strong></h3>
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="actors-section  mb-5 p-4 rounded-4 " :class="{'expanded' : showAllActors}">
-          <div class="actor-container"></div>
-          <h5 class="mb-4">Reparto Principal</h5>
+        <div class="actors-section mb-5 p-3 p-md-4 rounded-4" :class="{'expanded' : showAllActors}">
+          <h5 class="mb-3 mb-md-4">Reparto Principal</h5>
 
-          <transition-group name="fade-actors" tag="div" class="d-flex flex-wrap gap-3">
-            <div v-for="actor in displayedActors" :key="actor.id" class="actor-card rounded-3 mb-4">
+          <transition-group name="fade-actors" tag="div" class="d-flex flex-wrap gap-2 gap-sm-3 justify-content-start align-items-stretch">
+            <div v-for="actor in displayedActors" :key="actor.id" class="actor-card rounded-3 mb-3">
               <img :src="actor.photo" alt="" class="actor-image rounded-3">
-              <p class="text-center">{{ actor.name }}</p>
+              <p class="text-center small mt-1 mb-1 px-1 text-truncate">{{ actor.name }}</p>
             </div>
           </transition-group>
 
-          <button @click="showAllActors = !showAllActors" class="btn btn-outline-yellow">{{showAllActors ? 'Ver Menos' : 'Ver Reparto Completo'}}</button>
+          <button v-if="filteredActors.length > 5" @click="showAllActors = !showAllActors" class="btn btn-outline-yellow mt-2">{{showAllActors ? 'Ver Menos' : 'Ver Reparto Completo'}}</button>
         </div>
 
-        <div ref="trailerSection" class="trailer-section ">
-                <div class="ratio ratio-16x9 shadow-sm rounded overflow-hidden">
-        <iframe
-          :src="'https://www.youtube.com/embed/' + trailerKey"
-          title="Youtube video player"
-          frameborder="0"
-          allow="
-            accelerometer;
-            autoplay;
-            clipboard-write;
-            encrypted-media;
-            gyroscope;
-            picture-in-picture;
-          "
-          allowfullscreen=""
-        ></iframe>
-      </div>
+        <div ref="trailerSection" class="trailer-section" v-if="trailerKey">
+          <div class="ratio ratio-16x9 shadow-sm rounded overflow-hidden">
+            <iframe
+              :src="'https://www.youtube.com/embed/' + trailerKey"
+              title="Youtube video player"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+            ></iframe>
+          </div>
         </div>
 
-        <div class="my-5 review-section ">
-          <div class="d-flex justify-content-between align-items-center mb-5">
-                      <div>
-            <h5 class="text-yellow mb-3"><strong>Comunidad</strong></h5>
-            <h2 ><strong>Reseñas de la audiencia</strong></h2>
+        <div class="my-4 my-md-5 review-section">
+          <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3 mb-4 mb-md-5">
+            <div>
+              <h5 class="text-yellow mb-2"><strong>Comunidad</strong></h5>
+              <h2 class="mb-0"><strong>Reseñas de la audiencia</strong></h2>
+            </div>
+
+            <div class="align-self-end align-self-sm-auto">
+              <h2 class="text-yellow d-flex align-items-center gap-2 mb-0">
+                <font-awesome-icon icon="fa-solid fa-star responsive-icon" />
+                <strong>{{ reviewMedia }} / 10</strong>
+              </h2>
+              <p class="text-end text-sm-end mb-0 small">{{ reviews.length }} valoraciones</p>
+            </div>
           </div>
 
-          <div>
-            <h2 class="text-yellow d-flex align-items-center gap-2">
-              <font-awesome-icon icon="fa-solid fa-star responsive-icon " />
-              <strong >{{ reviewMedia }} / 10</strong>
-            </h2>
-            <p class="text-end ">{{ reviews.length }} valoraciones</p>
-          </div>
-          </div>
-
-          <div v-if="user" class="comment-area rounded-4">
-            <div class="d-flex justify-content-between mb-3">
-              <p class="mb-0 "><strong>Comparte tu reseña</strong></p>
+          <div v-if="user" class="comment-area rounded-4 p-3 p-md-4">
+            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2 mb-3">
+              <p class="mb-0"><strong>Comparte tu reseña</strong></p>
               <div class="position-relative d-inline-block">
-                <button @click="showRatingPopover = !showRatingPopover"  class="btn btn-outline-yellow">Tu nota: {{ rating || 1 }} / 10  <font-awesome-icon class="text-yellow" icon="fa-solid fa-star  responsive-icon " /></button>
+                <button @click="showRatingPopover = !showRatingPopover" class="btn btn-outline-yellow btn-sm">Tu nota: {{ rating || 1 }} / 10 <font-awesome-icon class="text-yellow ms-1" icon="fa-solid fa-star responsive-icon" /></button>
 
-                <div v-if="showRatingPopover" class="rating-popover shadow-lg rounded-3 p-3">
-                  <div class="d-flex ">
-                    <button @click="selectRating(n)" v-for="n in 10" :class="n <= rating ? 'btn-yellow' : 'btn-outline-yellow'" :key="n" class="btn btn-sm py-2 px-3 text-white rounded-0  ">{{ n }}</button>
+                <div v-if="showRatingPopover" class="rating-popover shadow-lg rounded-3 p-2 p-sm-3">
+                  <div class="d-flex flex-wrap gap-1">
+                    <button @click="selectRating(n)" v-for="n in 10" :class="n <= rating ? 'btn-yellow' : 'btn-outline-yellow'" :key="n" class="btn btn-sm px-2 px-sm-3 text-white">{{ n }}</button>
                   </div>
                 </div>
               </div>
             </div>
 
-            <textarea v-model="newReview" style="height: 150px;" class="w-100 form-control mb-4" placeholder="¿Que te parecio la pelicula? Comparte tu opinion con los demas" ></textarea>
+            <textarea v-model="newReview" style="height: 120px;" class="w-100 form-control mb-3 mb-md-4" placeholder="¿Qué te pareció la película? Comparte tu opinión con los demás"></textarea>
 
-            <button @click="sendReview" class="btn btn-yellow">Publicar Reseña</button>
+            <button @click="sendReview" class="btn btn-yellow w-100 w-sm-auto">Publicar Reseña</button>
           </div>
 
-          <div v-else class=" d-flex  justify-content-between align-items-center bg-dark border border-light-subtle border-2 p-4 rounded-4" style="border-style: dotted  !important;">
-            <p class="mb-0">Inicia sesion para escribir una reseña y dejar tu valoracion</p>
-            <router-link :to="`/login?redirect=/peliculas/${movie?.id}`" class="btn btn-outline-yellow btn-sm rounded-3 text-white">Iniciar sesión</router-link>
+          <div v-else class="d-flex flex-column flex-sm-row justify-content-between align-items-center gap-3 bg-dark border border-light-subtle border-2 p-3 p-md-4 rounded-4" style="border-style: dotted !important;">
+            <p class="mb-0 text-center text-sm-start">Inicia sesión para escribir una reseña y dejar tu valoración</p>
+            <router-link :to="`/login?redirect=/peliculas/${movie?.id}`" class="btn btn-outline-yellow btn-sm rounded-3 text-white text-nowrap">Iniciar sesión</router-link>
           </div>
 
           <div>
             <div>
-              <div class="d-flex my-4 justify-content-between align-items-center   ">
-                <h5 class="mb-0 ">{{ reviews.length }} reseñas</h5>
-              <div class=" d-flex justify-content-center  "  >
-                <button class="p-2 me-4 btn " :class=" activeFilter === 'newToOld' ? 'btn-yellow' : 'btn-outline-yellow'" @click="activeFilter = 'newToOld'">Mas nuevas</button>
-                <button class="p-2 me-4 btn" :class=" activeFilter === 'oldToNew' ? 'btn-yellow' : 'btn-outline-yellow'" @click="activeFilter = 'oldToNew'">Mas antiguas</button>
-                <button class="p-2 btn" :class=" activeFilter === 'likes' ? 'btn-yellow' : 'btn-outline-yellow'" @click="activeFilter = 'likes'">Mejores Valoradas</button>
-              </div>
+              <div class="d-flex flex-column flex-md-row my-4 justify-content-between align-items-start align-items-md-center gap-3">
+                <h5 class="mb-0">{{ reviews.length }} reseñas</h5>
+                <div class="d-flex flex-wrap gap-2">
+                  <button class="p-2 btn btn-sm btn-md-normal" :class="activeFilter === 'newToOld' ? 'btn-yellow' : 'btn-outline-yellow'" @click="activeFilter = 'newToOld'">Más nuevas</button>
+                  <button class="p-2 btn btn-sm btn-md-normal" :class="activeFilter === 'oldToNew' ? 'btn-yellow' : 'btn-outline-yellow'" @click="activeFilter = 'oldToNew'">Más antiguas</button>
+                  <button class="p-2 btn btn-sm btn-md-normal" :class="activeFilter === 'likes' ? 'btn-yellow' : 'btn-outline-yellow'" @click="activeFilter = 'likes'">Mejores Valoradas</button>
+                </div>
               </div>
 
-              <div class="comment-card mb-3 rounded-4 p-4" v-for="review in sortedReviews" :key="review.id">
+              <div class="comment-card mb-3 rounded-4 p-3 p-md-4" v-for="review in sortedReviews" :key="review.id">
                 <div class=" mb-3 d-flex justify-content-between">
                   <div class="d-flex align-items-center gap-2">
                  <button
@@ -200,7 +191,6 @@ import { useToast } from "vue-toastification";
 import { onUnmounted } from "vue";
 // Services
 import { getTMDBTrailer } from "@/services/tmdbService";
-import { getMovies } from "@/services/movieService";
 import { getActors } from "@/services/actorService";
 import { getGenres } from "@/services/genreService";
 import {
@@ -215,7 +205,6 @@ import { useMoviesStore } from "@/stores/moviesStore";
 // Utils
 import { convertErrors } from "@/utils/errorMessages";
 import { convertMinutes } from "@/utils/moviesUtils";
-import { faL } from "@fortawesome/free-solid-svg-icons";
 // SVG
 
 // Composables
@@ -324,11 +313,6 @@ onMounted(async () => {
       movieStore.setLikes(likes);
     });
   }
-
-  filteredActors.value =
-    actors.value.filter((actor) => movie.value.actors?.includes(actor.id)) || [];
-  filteredGenres.value =
-    genres.value.filter((genre) => movie.value.genres?.includes(genre.id)) || [];
 });
 
 // Method to unsubscribe when the component is unmounted
@@ -366,9 +350,17 @@ const loadData = async () => {
     return
   }
 
+  // Cargar actores y géneros para filtrar
+  const [actorsData, genresData] = await Promise.all([getActors(), getGenres()]);
+  actors.value = actorsData || [];
+  genres.value = genresData || [];
+
+  filteredActors.value = actors.value.filter((actor) => movie.value.actors?.includes(actor.id)) || [];
+  filteredGenres.value = genres.value.filter((genre) => movie.value.genres?.includes(genre.id)) || [];
+
   if (movie.value.tmdbId) {
-      trailerKey.value = await getTMDBTrailer(movie.value.tmdbId);
-    }
+    trailerKey.value = await getTMDBTrailer(movie.value.tmdbId);
+  }
 };
 
 
@@ -446,10 +438,16 @@ const toggleLike = async (reviewId) => {
   position: relative;
   width: 100vw;
   margin-left: calc(-50vw + 50%);
-  min-height: 400px;
+  min-height: 350px;
   background-size: cover;
+  background-position: center;
   background-repeat: no-repeat;
-  padding: 150px 50px;
+  padding: 60px 20px;
+
+  @media (min-width: 768px) {
+    min-height: 400px;
+    padding: 120px 50px;
+  }
 }
 
 .movie-backdrop::before {
@@ -459,21 +457,29 @@ const toggleLike = async (reviewId) => {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(to left, rgba(0, 0, 0, 0.1) 0%, rgb(26, 26, 26) 100%);
+  background: linear-gradient(to top, rgb(26, 26, 26) 0%, rgba(26, 26, 26, 0.8) 50%, rgba(0, 0, 0, 0.4) 100%);
   z-index: 1;
+
+  @media (min-width: 768px) {
+    background: linear-gradient(to left, rgba(0, 0, 0, 0.1) 0%, rgb(26, 26, 26) 100%);
+  }
 }
 
 .movie-backdrop > * {
-position: relative;
-z-index: 2;
+  position: relative;
+  z-index: 2;
 }
 
 .movie-poster {
-  width: 250px;
+  width: 180px;
   aspect-ratio: 2 / 3;
   object-fit: cover;
   border-radius: 8px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+
+  @media (min-width: 768px) {
+    width: 250px;
+  }
 }
 
 .ficha-text {
@@ -487,15 +493,26 @@ z-index: 2;
 }
 
 .btn-outline-yellow:hover .tmdb-icon {
-  fill: color.adjust($primary-color, $lightness: -10%) 
+  fill: color.adjust($primary-color, $lightness: -10%);
 }
 
 .info-card {
   background-color: color.adjust($secondary-color, $lightness: -8%);
   border: 1px solid rgba($primary-color, 0.4);
-  padding: 20px;
+  padding: 12px;
   border-radius: 8px;
-  width: 175px;
+  width: 100%;
+  min-width: 0;
+
+  h3 {
+    font-size: clamp(1.1rem, 2.5vw, 1.75rem);
+    word-break: break-word;
+  }
+
+  @media (min-width: 576px) {
+    width: 175px;
+    padding: 20px;
+  }
 }
 
 .info-card-title {
@@ -503,23 +520,28 @@ z-index: 2;
 }
 
 .actors-section {
-  width: 65%;
+  width: 100%;
   background-color: color.adjust($secondary-color, $lightness: 12%);
-  max-height: 360px;
-  transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  overflow: hidden;
+  max-height: none;
+  overflow: visible;
+
+  @media (min-width: 992px) {
+    width: 75%;
+    max-height: 360px;
+    overflow: hidden;
+
+    &.expanded {
+      max-height: 2500px;
+    }
+  }
 }
 
 .actors-section h5 {
   color: $primary-color;
 }
 
-.actors-section.expanded {
-  max-height: 2500px; 
-}
-
 .fade-actors-enter-active, .fade-actors-leave-active {
-    transition: opacity 0.3s ease, transform 0.3s ease
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 .fade-actors-enter-from, .fade-actors-leave-to {
@@ -532,13 +554,21 @@ z-index: 2;
 }
 
 .trailer-section {
-  margin-top: 120px;
+  margin-top: 40px;
+
+  @media (min-width: 768px) {
+    margin-top: 80px;
+  }
 }
 
 .actor-card {
   height: 200px;
-  width: 140px;
+  width: 130px;
   background-color: rgb(32, 30, 30);
+
+  @media (min-width: 576px) {
+    width: 140px;
+  }
 }
 
 .actor-image {
@@ -550,8 +580,12 @@ z-index: 2;
 
 .comment-area {
   background-color: color.adjust($secondary-color, $lightness: 10%);
-  padding: 20px;
+  padding: 15px;
   border: 1px solid rgba($primary-color, 0.4);
+
+  @media (min-width: 768px) {
+    padding: 20px;
+  }
 }
 
 .rating-popover {
@@ -561,10 +595,10 @@ z-index: 2;
   background-color: color.adjust($secondary-color, $lightness: -5%);
   border: 1px solid rgba($primary-color, 0.4);
   z-index: 100;
+  max-width: 90vw;
 }
 
 .comment-card {
   background-color: color.adjust($secondary-color, $lightness: 10%);
 }
-
 </style>
