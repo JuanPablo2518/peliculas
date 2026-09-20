@@ -4,7 +4,7 @@ Aplicación para conocer más sobre películas: explora un catálogo, revisa det
 
 ![Vista principal de Filmados](https://imgur.com/VdS6TJH.jpg)
 
-🔗 [Demo en vivo](#) · 📁 [Repositorio](https://github.com/JuanPablo2518/peliculas)
+🔗 [Demo en vivo](https://peliculas-843ab.web.app/peliculas) · 📁 [Repositorio](https://github.com/JuanPablo2518/peliculas)
 
 ## Funcionalidades
 
